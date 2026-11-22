@@ -1,0 +1,145 @@
+[
+  {
+    "id": "aea-results.ranking.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-results.ranking"
+    ],
+    "prompt": "A colleague takes Goodfire’s 0.79 on Fortress versus WildChat and predicts that a fixed alert will correctly classify 79 out of every 100 new prompts. Diagnose the leap using a randomly chosen pair.",
+    "reference": "It is approximately the chance a randomly chosen Fortress prompt scores above a WildChat prompt, with ties getting half credit. Accuracy requires a decision threshold and a specified evaluation population. An individual prompt can be misranked despite this average.",
+    "expectations": [
+      "It is approximately the chance a randomly chosen Fortress prompt scores above a WildChat prompt, with ties getting half credit.",
+      "Accuracy requires a decision threshold and a specified evaluation population.",
+      "An individual prompt can be misranked despite this average."
+    ],
+    "misconceptions": [
+      "Reads AUC as accuracy, calibration or a result on the other target."
+    ]
+  },
+  {
+    "id": "aea-results.ranking.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-results.ranking"
+    ],
+    "prompt": "A classmate says the right panel predicts whether the one rollout being scored will verbalize. Correct the outcome and explain why a single-rollout budget can still be compared against it.",
+    "reference": "The positive label is whether the Fortress prompt has any positive trace among 100 reference rollouts. One observed rollout may provide a score that predicts that prompt-level label. The single-rollout score and reference label are different quantities even if some samples are shared.",
+    "expectations": [
+      "The positive label is whether the Fortress prompt has any positive trace among 100 reference rollouts.",
+      "One observed rollout may provide a score that predicts that prompt-level label.",
+      "The single-rollout score and reference label are different quantities even if some samples are shared."
+    ],
+    "misconceptions": [
+      "Reads AUC as accuracy, calibration or a result on the other target."
+    ]
+  },
+  {
+    "id": "aea-results.ranking.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-results.ranking"
+    ],
+    "prompt": "Two screening scores rank items identically. One score is ten times larger everywhere. Explain which reported metric remains unchanged and what can change when both systems use the same alert cutoff.",
+    "reference": "AUROC stays the same because ordering is unchanged. The alert rate and threshold-dependent error rates may change. The transform preserves ties as well as strict ordering.",
+    "expectations": [
+      "AUROC stays the same because ordering is unchanged.",
+      "The alert rate and threshold-dependent error rates may change.",
+      "The transform preserves ties as well as strict ordering."
+    ],
+    "misconceptions": [
+      "Reads AUC as accuracy, calibration or a result on the other target."
+    ]
+  },
+  {
+    "id": "aea-mixed.rollout-ranking",
+    "kind": "content",
+    "format": "staged",
+    "demand": "apply",
+    "targets": [
+      "aea-results.ranking"
+    ],
+    "prompt": "Two evaluation prompts and one deployment prompt each get one rollout. The deployment score is 0.20 and the second evaluation item scores 0.30. The judge flags none of the sampled traces.",
+    "reference": "Take the highest score across the boundary positions reached in the rollout. $$\\max(0.10,0.25,0.05)=0.25$$ Each evaluation score beats the deployment score, so both pairs count as wins. $$\\mathrm{AUROC}=\\frac{1+1}{2}=1$$ The score separates the sources on these three items. That claim uses dataset provenance as the label. The zero flags provide no positive sampled verbalizations, and the source ranking does not establish which prompts ever verbalize across a larger reference sample.",
+    "parts": [
+      {
+        "concept": "aea-results.scores",
+        "facet": "do",
+        "kind": "mc",
+        "text": "The first evaluation item has boundary scores 0.10, 0.25 and 0.05. What is its prompt score?",
+        "solution": "Take the highest score across the boundary positions reached in the rollout. $$\\max(0.10,0.25,0.05)=0.25$$",
+        "options": [
+          {
+            "id": "a",
+            "text": "$0.05$",
+            "why": "This is the smallest score.",
+            "correct": false
+          },
+          {
+            "id": "b",
+            "text": "$0.10$",
+            "why": "This is the first boundary score.",
+            "correct": false
+          },
+          {
+            "id": "c",
+            "text": "$0.25$",
+            "why": "This is the highest boundary score.",
+            "correct": true
+          },
+          {
+            "id": "d",
+            "text": "$0.40$",
+            "why": "This sums the boundary scores.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "concept": "aea-results.pair-auc",
+        "facet": "do",
+        "kind": "mc",
+        "text": "Use the two evaluation scores 0.25 and 0.30 and compare each with the deployment score 0.20. What is AUROC for separating the sources?",
+        "solution": "Each evaluation score beats the deployment score, so both pairs count as wins. $$\\mathrm{AUROC}=\\frac{1+1}{2}=1$$",
+        "options": [
+          {
+            "id": "a",
+            "text": "$1.00$",
+            "why": "Both evaluation scores exceed the deployment score.",
+            "correct": true
+          },
+          {
+            "id": "b",
+            "text": "$0.50$",
+            "why": "There are two wins and no lost or tied pairs.",
+            "correct": false
+          },
+          {
+            "id": "c",
+            "text": "$0.75$",
+            "why": "There is no half-point tie.",
+            "correct": false
+          },
+          {
+            "id": "d",
+            "text": "$0.00$",
+            "why": "The evaluation scores rank higher, not lower.",
+            "correct": false
+          }
+        ]
+      },
+      {
+        "concept": "aea-results.ranking",
+        "facet": "explain",
+        "kind": "free",
+        "text": "The scores order both evaluation prompts above the deployment prompt, even though the judge flagged zero traces. What specific classification result does this support?",
+        "solution": "The score separates the sources on these three items. That claim uses dataset provenance as the label. The zero flags provide no positive sampled verbalizations, and the source ranking does not establish which prompts ever verbalize across a larger reference sample."
+      }
+    ]
+  }
+]

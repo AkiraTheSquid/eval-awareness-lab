@@ -1,0 +1,59 @@
+[
+  {
+    "id": "aea-validity.causal.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-validity.causal"
+    ],
+    "prompt": "Two studies use the same model and tasks. One observes that spontaneous awareness wording often accompanies refusal. The other inserts such wording with a matched neutral comparison. Explain which supports a causal interpretation.",
+    "reference": "The controlled insertion changes a potential cause directly. The neutral comparison helps isolate the content. The observational result leaves room for shared causes such as prompt difficulty.",
+    "expectations": [
+      "The controlled intervention supplies stronger causal evidence.",
+      "The neutral comparison helps isolate evaluation-related content.",
+      "The association alone permits a prompt-level common cause."
+    ],
+    "misconceptions": [
+      "Takes a monitor shift as evidence that awareness caused a behavior shift."
+    ]
+  },
+  {
+    "id": "aea-validity.causal.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.causal"
+    ],
+    "prompt": "Prompt rewriting lowers a logit score. A research team proposes replacing every original item on that basis. What evidence would make this replacement defensible as an evaluation improvement?",
+    "reference": "Check that task semantics, target behavior and difficulty are preserved. Check the new result with independent measurements and appropriate control rewrites. An altered task or broader persona shift can explain an apparent improvement.",
+    "expectations": [
+      "Check that task semantics, target behavior and difficulty are preserved.",
+      "Check the new result with independent measurements and appropriate control rewrites.",
+      "An altered task or broader persona shift can explain an apparent improvement."
+    ],
+    "misconceptions": [
+      "Takes a monitor shift as evidence that awareness caused a behavior shift."
+    ]
+  },
+  {
+    "id": "aea-validity.causal.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.causal"
+    ],
+    "prompt": "An activation intervention increases uncertainty language in a factual model. The team claims it improves abstention. Design the needed check.",
+    "reference": "Measure abstention separately under the intervention and a matched control direction. Increased uncertainty wording alone leaves the behavioral effect unresolved. A matched irrelevant intervention tests whether the behavior shift is specific to the proposed feature.",
+    "expectations": [
+      "Measure abstention separately under the intervention and a matched control direction.",
+      "Increased uncertainty wording alone leaves the behavioral effect unresolved.",
+      "A matched irrelevant intervention tests whether the behavior shift is specific to the proposed feature."
+    ],
+    "misconceptions": [
+      "Takes a monitor shift as evidence that awareness caused a behavior shift."
+    ]
+  }
+]

@@ -1,0 +1,59 @@
+[
+  {
+    "id": "aea-validity.strategy.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-validity.strategy"
+    ],
+    "prompt": "A model assigns high probability to a testing phrase and gives the same answers across conditions. Which additional observations would support a claim of evaluation gaming?",
+    "reference": "Show behavior changes with perceived evaluation and the expected scoring incentive while the task is controlled. Rule out straightforward prompt difficulty or formatting explanations. Confirm that the model had access to the changed scoring condition.",
+    "expectations": [
+      "Show behavior changes with perceived evaluation and the expected scoring incentive while the task is controlled.",
+      "Rule out straightforward prompt difficulty or formatting explanations.",
+      "Confirm that the model had access to the changed scoring condition."
+    ],
+    "misconceptions": [
+      "Infers a deceptive objective from a high awareness score or a behavioral switch."
+    ]
+  },
+  {
+    "id": "aea-validity.strategy.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.strategy"
+    ],
+    "prompt": "A model’s score drops after seeing a benchmark label. Design a controlled comparison that would distinguish selective underperformance from a brittle label response.",
+    "reference": "A label can change task interpretation or trigger a brittle response policy. Test the same tasks with independent changes to framing and incentives, and verify capability in matched conditions. Demonstrated competence on the same task helps distinguish selective withholding from lack of ability.",
+    "expectations": [
+      "A label can change task interpretation or trigger a brittle response policy.",
+      "Test the same tasks with independent changes to framing and incentives, and verify capability in matched conditions.",
+      "Demonstrated competence on the same task helps distinguish selective withholding from lack of ability."
+    ],
+    "misconceptions": [
+      "Infers a deceptive objective from a high awareness score or a behavioral switch."
+    ]
+  },
+  {
+    "id": "aea-validity.strategy.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.strategy"
+    ],
+    "prompt": "A customer-support agent starts repeating a phrase that maximizes the grader score while leaving the user’s issue unresolved. Evaluate whether the observed behavior alone supports a covert conflicting objective.",
+    "reference": "It supports reward hacking if exploiting the score gap drives the behavior. A covert objective claim needs evidence of persistent conflicting goals and strategically conditional behavior under controlled oversight variations. Check that the agent’s choice tracks the grader reward when wording and task are held fixed.",
+    "expectations": [
+      "It supports reward hacking if exploiting the score gap drives the behavior.",
+      "A covert objective claim needs evidence of persistent conflicting goals and strategically conditional behavior under controlled oversight variations.",
+      "Check that the agent’s choice tracks the grader reward when wording and task are held fixed."
+    ],
+    "misconceptions": [
+      "Infers a deceptive objective from a high awareness score or a behavioral switch."
+    ]
+  }
+]

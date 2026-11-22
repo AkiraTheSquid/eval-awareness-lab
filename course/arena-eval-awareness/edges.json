@@ -1,0 +1,68 @@
+[
+  {
+    "a": "aea-results.scores",
+    "b": "aea-observe.phrase",
+    "type": "depends-on",
+    "note": "A prompt maximum compares conditional phrase scores at different prefixes."
+  },
+  {
+    "a": "aea-results.ranking",
+    "b": "aea-results.scores",
+    "type": "depends-on",
+    "note": "Figure 2 compares rankings induced by two different prompt scores at each budget."
+  },
+  {
+    "a": "aea-validity.transport",
+    "b": "aea-results.ranking",
+    "type": "depends-on",
+    "note": "Transport compares fixed score rankings and operating thresholds on distinct populations."
+  },
+  {
+    "a": "aea-observe.signal",
+    "b": "aea-validity.faithfulness",
+    "type": "contrasts",
+    "note": "Sampling can omit a phrase by chance, while faithfulness tests whether an omitted factor influenced a decision."
+  },
+  {
+    "a": "aea-results.variance",
+    "b": "aea-validity.causal",
+    "type": "contrasts",
+    "note": "Grouping observed rollouts assesses association. Randomized interventions test effects on behavior."
+  },
+  {
+    "a": "aea-observe.readouts",
+    "b": "aea-results.targets",
+    "type": "explains",
+    "note": "A phrase readout is tied to linguistic expression, so different phrase targets can behave differently."
+  },
+  {
+    "a": "aea-validity.confounds",
+    "b": "aea-validity.transport",
+    "type": "explains",
+    "note": "A source cue can remain predictive in a random split and fail on a different evaluation source."
+  },
+  {
+    "a": "aea-validity.causal",
+    "b": "aea-validity.strategy",
+    "type": "evidence-for",
+    "note": "A controlled behavior shift can support one link in a strategic account, while incentives and objective require separate evidence."
+  },
+  {
+    "a": "aea-results.scores",
+    "b": "aea-results.variance",
+    "type": "explains",
+    "note": "The variance comparison summarizes a per-rollout peak and groups traces by individual or prompt-level verbalization."
+  },
+  {
+    "a": "aea-results.ranking",
+    "b": "aea-results.pair-auc",
+    "type": "depends-on",
+    "note": "The task interprets an AUROC claim as a comparison of positive and negative items."
+  },
+  {
+    "a": "aea-results.variance",
+    "b": "aea-results.any-flag",
+    "type": "depends-on",
+    "note": "The second part interprets the frequency of ever-positive prompts after increasing their sample budget."
+  }
+]

@@ -1,0 +1,59 @@
+[
+  {
+    "id": "aea-validity.transport.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-validity.transport"
+    ],
+    "prompt": "Monitor A was tested on a random split of one benchmark. Monitor B froze its score on that benchmark and ranked prompts on a never-used source. Compare what each result says about source transfer.",
+    "reference": "The split checks new items from the same source. The held-out source checks whether ordering survives a source change. Fixed choices make the comparison more informative about generalization.",
+    "expectations": [
+      "A random split can retain source cues.",
+      "Monitor B tests the ranking on a new source.",
+      "Freezing choices avoids tuning to the held-out results."
+    ],
+    "misconceptions": [
+      "Randomly splits a benchmark and calls it external validation."
+    ]
+  },
+  {
+    "id": "aea-validity.transport.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.transport"
+    ],
+    "prompt": "A team uses the same tasks across settings and finds that its training-awareness and eval-awareness probes score almost identically. Design a crossed manipulation that tests the shared signal.",
+    "reference": "Vary credible training framing and evaluation framing independently while holding task text fixed. Compare whether each readout follows its named variable or responds similarly to both. A selective response to one factor is stronger evidence for distinct sensitivity than a pooled correlation.",
+    "expectations": [
+      "Vary credible training framing and evaluation framing independently while holding task text fixed.",
+      "Compare whether each readout follows its named variable or responds similarly to both.",
+      "A selective response to one factor is stronger evidence for distinct sensitivity than a pooled correlation."
+    ],
+    "misconceptions": [
+      "Randomly splits a benchmark and calls it external validation."
+    ]
+  },
+  {
+    "id": "aea-validity.transport.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.transport"
+    ],
+    "prompt": "A fraud detector moves to another claims population. Its AUROC is stable, but legitimate claims trigger more alerts at the frozen cutoff. Diagnose the discrepancy using the two measurements.",
+    "reference": "The score ranking can survive a shift in the scale at a frozen cutoff. Report the false-positive rate at that cutoff and consider prevalence when reporting precision. Measure whether the score distribution shifted among genuine cases at the same cutoff.",
+    "expectations": [
+      "The score ranking can survive a shift in the scale at a frozen cutoff.",
+      "Report the false-positive rate at that cutoff and consider prevalence when reporting precision.",
+      "Measure whether the score distribution shifted among genuine cases at the same cutoff."
+    ],
+    "misconceptions": [
+      "Randomly splits a benchmark and calls it external validation."
+    ]
+  }
+]

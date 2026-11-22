@@ -1,0 +1,73 @@
+[
+  {
+    "id": "aea-goodfire",
+    "title": "Logits as a new monitor for evaluation awareness",
+    "authors": "Santiago Aranguri",
+    "year": 2026,
+    "kind": "post",
+    "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/goodfire.txt",
+    "url": "https://www.lesswrong.com/posts/PK7ZvFZxrgpYtrpF4/logits-as-a-new-monitor-for-evaluation-awareness-1"
+  },
+  {
+    "id": "aea-companion",
+    "title": "Verbalized Eval Awareness Inflates Measured Safety",
+    "authors": "Santiago Aranguri and Joseph Bloom",
+    "year": 2026,
+    "kind": "post",
+    "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/companion.txt",
+    "url": "https://www.goodfire.com/research/verbalized-eval-awareness-inflates-measured-safety"
+  },
+  {
+    "id": "aea-heidari",
+    "title": "Evaluation Awareness in Language Models: Representation, Verbalization, and Control",
+    "authors": "Farzaneh Heidari, Amin Memarian, and Guillaume Rabusseau",
+    "year": 2026,
+    "kind": "paper",
+    "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/heidari.txt",
+    "url": "https://arxiv.org/html/2608.21766v1"
+  },
+  {
+    "id": "aea-needham",
+    "title": "Large Language Models Often Know When They Are Being Evaluated",
+    "authors": "Jacob Needham et al.",
+    "year": 2025,
+    "kind": "paper",
+    "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/needham.txt",
+    "url": "https://arxiv.org/html/2505.23836v1"
+  },
+  {
+    "id": "aea-chen",
+    "title": "Reasoning models don’t always say what they think",
+    "authors": "Yanda Chen et al.",
+    "year": 2025,
+    "kind": "post",
+    "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/chen.txt",
+    "url": "https://www.anthropic.com/research/reasoning-models-dont-say-think"
+  },
+  {
+    "id": "aea-graders",
+    "title": "Different eval awareness may track different graders",
+    "authors": "Santiago Aranguri",
+    "year": 2026,
+    "kind": "post",
+    "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/graders.txt",
+    "url": "https://www.lesswrong.com/posts/dbBeff68R4toeegyw/different-eval-awareness-tracks-different-graders"
+  },
+  {
+    "id": "aea-fawcett",
+    "title": "An introduction to ROC analysis",
+    "authors": "Tom Fawcett",
+    "year": 2006,
+    "kind": "paper",
+    "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/fawcett.txt",
+    "url": "https://doi.org/10.1016/j.patrec.2005.10.010"
+  },
+  {
+    "id": "aea-research-guide",
+    "title": "Evaluation Awareness Beyond Verbalized Chain-of-Thought",
+    "authors": "Supplied research guide",
+    "year": 2026,
+    "kind": "doc",
+    "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/research-guide.txt"
+  }
+]

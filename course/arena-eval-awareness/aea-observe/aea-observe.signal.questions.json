@@ -1,0 +1,82 @@
+[
+  {
+    "id": "aea-observe.signal.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-observe.signal"
+    ],
+    "prompt": "An evaluator sees three silent rollouts, while a fixed testing phrase has become more probable before generation. Explain why this combination is compatible with the same underlying sampling process and what remains observable.",
+    "reference": "Sampling can miss an elevated but low-probability continuation. The evidence is for availability of the selected phrasing. Three draws can all omit the same phrase even when its probability is higher than a control.",
+    "expectations": [
+      "Sampling can miss an elevated but low-probability continuation.",
+      "The evidence is for availability of the selected phrasing.",
+      "Three draws can all omit the same phrase even when its probability is higher than a control."
+    ],
+    "misconceptions": [
+      "Treats silence as absence of signal."
+    ]
+  },
+  {
+    "id": "aea-observe.signal.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-observe.signal"
+    ],
+    "prompt": "Two models produce the same sampled response. Only one assigns a substantially higher probability to a fixed testing phrase than it did before a framing change. Identify what differs empirically and what conclusion would require an extra test.",
+    "reference": "The conditional probability of a possible continuation changed even though the emitted text matched. Inferring an internal belief or a behavior change requires evidence beyond that readout. A matched comparison to the model before the framing change anchors what “higher” means.",
+    "expectations": [
+      "The conditional probability of a possible continuation changed even though the emitted text matched.",
+      "Inferring an internal belief or a behavior change requires evidence beyond that readout.",
+      "A matched comparison to the model before the framing change anchors what “higher” means."
+    ],
+    "misconceptions": [
+      "Treats silence as absence of signal."
+    ]
+  },
+  {
+    "id": "aea-observe.signal.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-observe.signal"
+    ],
+    "prompt": "A translation monitor seldom emits an uncertainty warning. Design a probability-based comparison before it produces any text and explain what its result would support.",
+    "reference": "Compare conditional probability of a fixed warning under appropriately matched prefixes. An increase supports greater availability of the warning, with direct calibration or behavior requiring separate checks. The model may express uncertainty in other words even when the selected phrase remains unlikely.",
+    "expectations": [
+      "Compare conditional probability of a fixed warning under appropriately matched prefixes.",
+      "An increase supports greater availability of the warning, with direct calibration or behavior requiring separate checks.",
+      "The model may express uncertainty in other words even when the selected phrase remains unlikely."
+    ],
+    "misconceptions": [
+      "Treats silence as absence of signal."
+    ]
+  },
+  {
+    "id": "aea-synthesis.review",
+    "kind": "combined",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-observe.signal",
+      "aea-results.variance",
+      "aea-validity.confounds"
+    ],
+    "integration": "integrated",
+    "prompt": "An assistant is asked to solve the same harmless task in two data collections. A phrase monitor ranks authored eval items above real-user items. The signal appears before generated reasoning. On authored items, grouping by whether any of 50 samples verbalized explains more peak-score variance than grouping by whether a particular trace verbalized. Write a brief research review. Explain why the score can appear with silent traces, interpret the two groupings, and propose one matched study with rival predictions.",
+    "reference": "A probability readout can register an available phrase that a sampled trace omits. A prompt-level repeated-sampling label can track stable propensity better than one sampled flag, while the comparison remains observational and budget dependent. Cross a candidate source cue with framing at fixed task content. State which pattern would favor a shortcut and which would favor the intended interpretation.",
+    "expectations": [
+      "A probability readout can register an available phrase that a sampled trace omits.",
+      "A prompt-level repeated-sampling label can track stable propensity better than one sampled flag, while the comparison remains observational and budget dependent.",
+      "Cross a candidate source cue with framing at fixed task content. State which pattern would favor a shortcut and which would favor the intended interpretation."
+    ],
+    "misconceptions": [
+      "Treats a zero flag count as proof of no signal.",
+      "Treats provenance ranking as an identified awareness measurement."
+    ]
+  }
+]

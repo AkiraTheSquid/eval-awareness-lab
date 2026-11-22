@@ -1,0 +1,795 @@
+Topic,Subtopic,Question,Answer,Problem difficulty,Output
+PyTorch,lm-1,"`logits` has shape `(n, V)` and came from one pass of a language model over n token ids. Return the row of scores for the token at position `p`, shape `(V,)`. `p` is at least 1.","import torch as t
+
+
+def solve(logits, p):
+    """"""Scores for the token at position p.""""""
+    return logits[p - 1]
+",15,"[0.0, 1.0, 2.0]"
+PyTorch,lm-1,"`logits` has shape `(n, V)`. A phrase of `m` tokens begins at position `start`. Return the rows that score the phrase tokens, shape `(m, V)`.","import torch as t
+
+
+def solve(logits, start, m):
+    """"""Rows that score a phrase of m tokens beginning at start.""""""
+    return logits[start - 1:start - 1 + m]
+",20,"[[0.0, 2.0], [3.0, 0.0]]"
+PyTorch,lm-1,"`ids` holds n token ids and `logits`, shape `(n, V)`, is the model's output for them. Return the score the model gave to the token that actually sits at position `p`, as a Python float. `p` is at least 1.","import torch as t
+
+
+def solve(logits, ids, p):
+    """"""Score of the actual token at position p.""""""
+    return logits[p - 1, ids[p]].item()
+",30,0.5
+PyTorch,lm-1,"`ids` holds n token ids and `logits` has shape `(n, V)`. For every position from 1 to n − 1, find the score the model gave to the token that actually sits there. Return them in order, shape `(n − 1,)`.","import torch as t
+
+
+def solve(logits, ids):
+    """"""Score of each actual token after the first.""""""
+    n = len(ids)
+    return logits[t.arange(n - 1), ids[1:]]
+",40,"[0.0, 0.5, 4.0]"
+PyTorch,lm-1,"`logits` has shape `(n, V)`. Return the id of the token the model found most likely for position `p`, as a Python int. `p` is at least 1.","import torch as t
+
+
+def solve(logits, p):
+    """"""Most likely token id for position p.""""""
+    return logits[p - 1].argmax().item()
+",30,2
+PyTorch,lm-1,"`ids` holds n token ids and `logits` has shape `(n, V)`. Count the positions from 1 to n − 1 at which the model's most likely token is the token that actually sits there. Return a Python int.","import torch as t
+
+
+def solve(logits, ids):
+    """"""How many next tokens the model's top guess got right.""""""
+    return (logits[:-1].argmax(dim=1) == ids[1:]).sum().item()
+",45,3
+PyTorch,lm-1,"`logits` has shape `(b, n, V)`: b texts of n tokens each. For every text, return the row of scores for its LAST token (the one at position n − 1). Shape `(b, V)`.","import torch as t
+
+
+def solve(logits):
+    """"""Scores for the last token of every text.""""""
+    return logits[:, -2]
+",35,"[[3.0, 4.0], [8.0, 0.0]]"
+PyTorch,lm-1,"`logits` has shape `(n, V)`. A phrase begins at position `start` and runs to the end of the text. Return the number of rows of `logits` that score phrase tokens, as a Python int.","import torch as t
+
+
+def solve(logits, start):
+    """"""How many rows score the phrase.""""""
+    return len(logits[start - 1:-1])
+",35,3
+PyTorch,lm-1,"`ids` holds n token ids and `logits` has shape `(n, V)`. A phrase begins at position `start` and runs to the end of the text. Return the score the model gave to each phrase token, in order, shape `(n − start,)`.","import torch as t
+
+
+def solve(logits, ids, start):
+    """"""Score of each phrase token.""""""
+    m = len(ids) - start
+    rows = logits[start - 1:start - 1 + m]
+    return rows[t.arange(m), ids[start:]]
+",60,"[0.5, 4.0]"
+PyTorch,lm-1,"`ids` holds n token ids and `logits` has shape `(n, V)`. A phrase begins at position `start` and runs to the end of the text. Return True if the model's most likely token matches the actual token at every phrase position, else False.","import torch as t
+
+
+def solve(logits, ids, start):
+    """"""Whether the model's top guess matches every phrase token.""""""
+    return (logits[start - 1:-1].argmax(dim=1) == ids[start:]).all().item()
+",65,True
+PyTorch,lm-1,"`ids` has shape `(b, n)`: b texts of n token ids. `logits` has shape `(b, n, V)`. In every text a phrase begins at the same position `start`. For each text, return the score the model gave to the FIRST phrase token. Shape `(b,)`.","import torch as t
+
+
+def solve(logits, ids, start):
+    """"""Score of the first phrase token in every text.""""""
+    b = len(ids)
+    return logits[t.arange(b), start - 1, ids[:, start]]
+",70,"[2.0, 0.0]"
+PyTorch,lm-1,"`logits` has shape `(n, V)`, one row of scores per position. Return a table of the same shape in which every row holds log-probabilities over the vocabulary.","import torch as t
+
+
+def solve(logits):
+    """"""Log-probabilities over the vocabulary, row by row.""""""
+    return t.log_softmax(logits, dim=-1)
+",15,"[[-2.407606, -1.407606, -0.407606], [-0.196734, -2.696734, -2.196734], [-3.84173, -0.04173, -3.94173]]"
+PyTorch,lm-1,"`per_token` has shape `(b, m)`: for each of b texts, the log-probability of each of the m phrase tokens. Return the log-probability of the whole phrase for each text, shape `(b,)`.","import torch as t
+import einops
+
+
+def solve(per_token):
+    """"""Phrase log-probability for each text.""""""
+    return einops.reduce(per_token, ""batch tok -> batch"", ""sum"")
+",20,"[-3.0, -1.0]"
+PyTorch,lm-1,"`rows` has shape `(m, V)` and holds raw scores. Return the log-probability that row `r` gives to token `tok`, as a Python float.","import torch as t
+
+
+def solve(rows, r, tok):
+    """"""Log-probability of one token in one row.""""""
+    return t.log_softmax(rows, dim=-1)[r, tok].item()
+",30,-0.407606
+PyTorch,lm-1,"`rows` has shape `(m, V)` and holds raw scores. Return the probability (not its logarithm) that row `r` gives to token `tok`, as a Python float.","import torch as t
+
+
+def solve(rows, r, tok):
+    """"""Probability of one token in one row.""""""
+    return t.log_softmax(rows, dim=-1)[r, tok].exp().item()
+",35,0.5
+PyTorch,lm-1,"`rows` has shape `(m, V)` and holds the raw scores that score an m-token phrase. `phrase` holds the m phrase token ids. Return the log-probability of each phrase token, in order, shape `(m,)`.","import torch as t
+
+
+def solve(rows, phrase):
+    """"""Log-probability of each phrase token.""""""
+    logp = t.log_softmax(rows, dim=-1)
+    return logp[t.arange(len(phrase)), phrase]
+",40,"[-0.407606, -0.196734, -0.04173]"
+PyTorch,lm-1,"`rows` has shape `(m, V)` and holds the raw scores that score an m-token phrase. `phrase` holds the m phrase token ids. Return the log-probability of the whole phrase, as a Python float.","import torch as t
+import einops
+
+
+def solve(rows, phrase):
+    """"""Log-probability of the whole phrase.""""""
+    logp = t.log_softmax(rows, dim=-1)
+    per_token = logp[t.arange(len(phrase)), phrase]
+    return einops.reduce(per_token, ""tok -> "", ""sum"").item()
+",45,-0.64607
+PyTorch,lm-1,"`logits` has shape `(b, m, V)`: for each of b texts, the raw scores that score the same m-token phrase. `phrase` holds the m phrase token ids. Return the log-probability of the whole phrase in each text, shape `(b,)`.","import torch as t
+import einops
+
+
+def solve(logits, phrase):
+    """"""Phrase log-probability in every text.""""""
+    logp = t.log_softmax(logits, dim=-1)
+    per_token = logp[:, t.arange(len(phrase)), phrase]
+    return einops.reduce(per_token, ""batch tok -> batch"", ""sum"")
+",50,"[-0.60434, -5.134589, -6.56483]"
+PyTorch,lm-1,"`logits` has shape `(b, m, V)`: for each of b texts, the raw scores that score the same m-token phrase. `phrase` holds the m phrase token ids. Return the index of the text in which the whole phrase is most likely, as a Python int.","import torch as t
+import einops
+
+
+def solve(logits, phrase):
+    """"""Which text makes the phrase most likely.""""""
+    logp = t.log_softmax(logits, dim=-1)
+    per_token = logp[:, t.arange(len(phrase)), phrase]
+    return einops.reduce(per_token, ""batch tok -> batch"", ""sum"").argmax().item()
+",55,0
+PyTorch,lm-1,"`ids` holds n token ids and `logits`, shape `(n, V)`, is the model's raw output for them. A phrase begins at position `start` and runs to the end of the text. Return the log-probability of the whole phrase given the text before it, as a Python float.","import torch as t
+import einops
+
+
+def solve(logits, ids, start):
+    """"""Log-probability of the phrase that ends the text.""""""
+    m = len(ids) - start
+    logp = t.log_softmax(logits[start - 1:start - 1 + m], dim=-1)
+    per_token = logp[t.arange(m), ids[start:]]
+    return einops.reduce(per_token, ""tok -> "", ""sum"").item()
+",65,-2.738464
+PyTorch,lm-1,"`ids` has shape `(b, n)` and `logits` has shape `(b, n, V)`: b texts of n tokens with the model's raw output. In every text a phrase begins at position `start` and runs to the end. Return the log-probability of each text's own phrase given the text before it, shape `(b,)`.","import torch as t
+import einops
+
+
+def solve(logits, ids, start):
+    """"""Phrase log-probability for each text in a batch.""""""
+    b = len(ids)
+    m = len(ids[0]) - start
+    logp = t.log_softmax(logits[:, start - 1:start - 1 + m], dim=-1)
+    per_token = logp[t.arange(b)[:, None], t.arange(m)[None, :], ids[:, start:]]
+    return einops.reduce(per_token, ""batch tok -> batch"", ""sum"")
+",75,"[-3.44019, -4.711297]"
+PyTorch,lm-1,"`ids` holds n token ids and `logits` has shape `(n, V)`. A phrase begins at position `start` and runs to the end of the text. Return the place within the phrase (0 for its first token) of the token the model found LEAST likely, as a Python int.","import torch as t
+
+
+def solve(logits, ids, start):
+    """"""Which phrase token was least expected.""""""
+    m = len(ids) - start
+    logp = t.log_softmax(logits[start - 1:start - 1 + m], dim=-1)
+    return t.argmin(logp[t.arange(m), ids[start:]]).item()
+",70,0
+PyTorch,lm-1,"`prefix`, `reasoning` and `phrase` are 1-D tensors of token ids. Return the sequence that tests the point after the first `b` reasoning tokens: the prefix, those `b` tokens, then the phrase.","import torch as t
+
+
+def solve(prefix, reasoning, phrase, b):
+    """"""Prefix, first b reasoning tokens, phrase.""""""
+    return t.cat([prefix, reasoning[:b], phrase])
+",15,"[90, 91, 92, 10, 11, 70, 71]"
+PyTorch,lm-1,"`before` holds the token ids of the text before a phrase, and `full` the ids of that text and the phrase encoded together. Return True if the ids before the phrase are unchanged in `full`, else False.","import torch as t
+
+
+def solve(before, full):
+    """"""Whether the ids before the phrase survived the joint encoding.""""""
+    return (full[:len(before)] == before).all().item()
+",20,True
+PyTorch,lm-1,"`prefix`, `reasoning` and `phrase` are 1-D tensors of token ids. A forced sequence is built to test the point after the first `b` reasoning tokens. Return the index of the logits row that scores the FIRST phrase token, as a Python int.","import torch as t
+
+
+def solve(prefix, reasoning, phrase, b):
+    """"""Row that scores the first phrase token.""""""
+    return len(prefix) + b - 1
+",30,4
+PyTorch,lm-1,"`prefix`, `reasoning` and `phrase` are 1-D tensors of token ids, and `bounds` is a 1-D tensor of points in the reasoning to test. Return the total length of the forced sequence for each point, as a tensor shaped like `bounds`.","import torch as t
+
+
+def solve(prefix, reasoning, phrase, bounds):
+    """"""Length of each forced sequence.""""""
+    return len(prefix) + bounds + len(phrase)
+",30,"[5, 7, 10]"
+PyTorch,lm-1,"`before` holds the token ids of the text before a phrase, and `full` the ids of that text and the phrase encoded together. The ids before the phrase are unchanged in `full`. Return the phrase's token ids.","import torch as t
+
+
+def solve(before, full):
+    """"""Phrase ids cut out of the joint encoding.""""""
+    return full[len(before):]
+",30,"[576, 71]"
+PyTorch,lm-1,"`before` holds the token ids of the text before a phrase, and `full` the ids of that text and the phrase encoded together. `full` is at least as long as `before`. Return the first position at which `full` differs from `before`, or the length of `before` if they agree everywhere, as a Python int.","import torch as t
+
+
+def solve(before, full):
+    """"""First position where the joint encoding departs from the earlier ids.""""""
+    n = len(before)
+    differs = full[:n] != before
+    return t.where(differs, t.arange(n), n).min().item()
+",45,4
+PyTorch,lm-1,"`before` holds the token ids of the text before a phrase. `full_a` and `full_b` are joint encodings of that text with two different phrases, and the earlier ids are unchanged in both. Return True if the two phrases take the same number of tokens, else False.","import torch as t
+
+
+def solve(before, full_a, full_b):
+    """"""Whether two phrases have equally many tokens here.""""""
+    return len(full_a) == len(full_b)
+",35,True
+PyTorch,lm-1,`prefix` and `reasoning` are 1-D tensors of token ids. Return the ids of the text that comes before the phrase when the point after the first `b` reasoning tokens is tested.,"import torch as t
+
+
+def solve(prefix, reasoning, b):
+    """"""Ids before the phrase at point b.""""""
+    return t.cat([prefix, reasoning[:b]])
+",30,"[90, 91, 92, 10, 11]"
+PyTorch,lm-1,"`before` holds the token ids of the text before a phrase, `full` the ids of that text and the phrase encoded together, and `alone` the ids of the phrase encoded on its own. Return the phrase ids cut from `full` when the earlier ids are unchanged in it; otherwise return `alone`.","import torch as t
+
+
+def solve(before, full, alone):
+    """"""Phrase ids in context, falling back to the stand-alone ids.""""""
+    n = len(before)
+    if (full[:n] == before).all():
+        return full[n:]
+    return alone
+",60,"[576, 71]"
+PyTorch,lm-1,"`prefix` and `reasoning` are 1-D tensors of token ids. `full` holds the ids of the prefix, the first `b` reasoning tokens and a phrase, encoded together, and the ids before the phrase are unchanged in it. Return the indices of the logits rows that score the phrase tokens, as a 1-D tensor.","import torch as t
+
+
+def solve(prefix, reasoning, b, full):
+    """"""Rows of the logits that score the phrase.""""""
+    start = len(prefix) + b
+    m = len(full) - start
+    return t.arange(start - 1, start - 1 + m)
+",65,"[4, 5]"
+PyTorch,lm-1,"`prefix` and `reasoning` are 1-D tensors of token ids. `full` holds the ids of the prefix, the first `b` reasoning tokens and a phrase encoded together, and `alone` the ids of the phrase encoded on its own. Return the forced sequence to give the model: `full` when the ids before the phrase are unchanged in it; otherwise the ids before the phrase followed by `alone`.","import torch as t
+
+
+def solve(prefix, reasoning, b, full, alone):
+    """"""Forced sequence, with the fallback when the joint encoding changed earlier ids.""""""
+    before = t.cat([prefix, reasoning[:b]])
+    n = len(before)
+    if (full[:n] == before).all():
+        return full
+    return t.cat([before, alone])
+",70,"[90, 91, 10, 11, 576, 71]"
+PyTorch,lm-1,"`r` holds the token ids of one rollout and `stop_id` is the id that closes the reasoning. Return the number of reasoning tokens: the position of the first `stop_id`, or the length of `r` if it never appears. Python int.","import torch as t
+
+
+def solve(r, stop_id):
+    """"""Number of tokens before the first stop token.""""""
+    stop = r == stop_id
+    return t.where(stop, t.arange(len(r)), len(r)).min().item()
+",20,4
+PyTorch,lm-1,"`is_end` is a boolean tensor of length V that is True for token ids that end a sentence. `reasoning` holds token ids. Return the sentence boundaries: for each sentence-ending token, the position right after it. 1-D tensor.","import torch as t
+
+
+def solve(is_end, reasoning):
+    """"""Positions right after each sentence-ending token.""""""
+    return t.nonzero(is_end[reasoning])[:, 0] + 1
+",25,"[3, 6]"
+PyTorch,lm-1,"`r` holds the token ids of one rollout and `stop_id` is the id that closes the reasoning. Return True if the rollout finished its reasoning (the id appears somewhere), else False.","import torch as t
+
+
+def solve(r, stop_id):
+    """"""Whether the reasoning was closed.""""""
+    return (r == stop_id).any().item()
+",30,True
+PyTorch,lm-1,"`r` holds the token ids of one rollout. The reasoning ends at the first token equal to `end_id` or to `pad_id`, whichever comes first; if neither appears it is the whole of `r`. Return the reasoning tokens.","import torch as t
+
+
+def solve(r, end_id, pad_id):
+    """"""Tokens before the first of two stop ids.""""""
+    stop = (r == end_id) | (r == pad_id)
+    n = t.where(stop, t.arange(len(r)), len(r)).min().item()
+    return r[:n]
+",45,"[10, 11]"
+PyTorch,lm-1,"`R` has shape `(k, T)`: k rollouts of T token ids each. `stop_id` is the id that closes the reasoning. Return the number of reasoning tokens in each rollout (T for a rollout in which the id never appears), shape `(k,)`.","import torch as t
+import einops
+
+
+def solve(R, stop_id):
+    """"""Reasoning length of every rollout.""""""
+    T = len(R[0])
+    return einops.reduce(t.where(R == stop_id, t.arange(T), T), ""rollout pos -> rollout"", ""min"")
+",50,"[1, 4, 0]"
+PyTorch,lm-1,"`is_end` is a boolean tensor of length V that is True for token ids that end a sentence. `reasoning` holds token ids. Return the number of sentences that end inside the reasoning, as a Python int.","import torch as t
+
+
+def solve(is_end, reasoning):
+    """"""How many sentence-ending tokens the reasoning holds.""""""
+    return is_end[reasoning].sum().item()
+",30,2
+PyTorch,lm-1,`is_end` is a boolean tensor of length V that is True for token ids that end a sentence. `reasoning` holds token ids and contains at least one sentence-ending token. Return the reasoning tokens up to and including the LAST sentence-ending token.,"import torch as t
+
+
+def solve(is_end, reasoning):
+    """"""The reasoning with its unfinished last sentence removed.""""""
+    bounds = t.nonzero(is_end[reasoning])[:, 0] + 1
+    return reasoning[:bounds[-1]]
+",45,"[0, 1, 3, 2, 2, 5]"
+PyTorch,lm-1,"`is_end` is a boolean tensor of length V that is True for token ids that end a sentence. `reasoning` holds token ids and `b` is a sentence boundary in it. Return the id of the token that ended the sentence at that boundary, as a Python int.","import torch as t
+
+
+def solve(is_end, reasoning, b):
+    """"""The sentence-ending token behind a boundary.""""""
+    return reasoning[b - 1].item()
+",35,3
+PyTorch,lm-1,`r` holds the token ids of one rollout and `stop_id` closes the reasoning (it may not appear). `is_end` is a boolean tensor of length V that is True for token ids that end a sentence. Return the sentence boundaries of the reasoning only: positions right after each sentence-ending token that comes before the first `stop_id`. 1-D tensor.,"import torch as t
+
+
+def solve(r, stop_id, is_end):
+    """"""Sentence boundaries inside the reasoning part of a rollout.""""""
+    n = t.where(r == stop_id, t.arange(len(r)), len(r)).min().item()
+    return t.nonzero(is_end[r[:n]])[:, 0] + 1
+",65,"[2, 4]"
+PyTorch,lm-1,"`R` has shape `(k, T)`: k rollouts of T token ids. `stop_id` closes the reasoning (it may be absent from a row). `is_end` is a boolean tensor of length V that is True for token ids that end a sentence. Return the number of sentence boundaries inside the reasoning of each rollout, shape `(k,)`.","import torch as t
+import einops
+
+
+def solve(R, stop_id, is_end):
+    """"""Boundaries per rollout, counting the reasoning only.""""""
+    T = len(R[0])
+    n = einops.reduce(t.where(R == stop_id, t.arange(T), T), ""rollout pos -> rollout"", ""min"")
+    inside = t.arange(T)[None, :] < n[:, None]
+    return (is_end[R] & inside).sum(dim=1)
+",75,"[1, 3, 0]"
+PyTorch,lm-1,"`r` holds the token ids of one rollout and `stop_id` closes the reasoning (it may not appear). `is_end` is a boolean tensor of length V that is True for token ids that end a sentence. Return the reasoning tokens before the FIRST sentence boundary, that is, the first sentence of the reasoning. If the reasoning has no sentence-ending token, return all of the reasoning.","import torch as t
+
+
+def solve(r, stop_id, is_end):
+    """"""First sentence of the reasoning.""""""
+    n = t.where(r == stop_id, t.arange(len(r)), len(r)).min().item()
+    cot = r[:n]
+    b = t.where(is_end[cot], t.arange(n) + 1, n).min().item()
+    return cot[:b]
+",75,"[0, 1, 3]"
+PyTorch,lm-1,"`seqs` is a list of 1-D tensors of token ids with different lengths. Return one table with a row per sequence, as wide as the longest, in which every sequence keeps its positions and the unused entries hold `pad`.","import torch as t
+
+
+def solve(seqs, pad):
+    """"""Sequences stacked into one table, filler on the right.""""""
+    lens = t.tensor([len(q) for q in seqs])
+    out = t.full((len(seqs), lens.max().item()), pad)
+    i = 0
+    for q in seqs:
+        out[i, :len(q)] = q
+        i += 1
+    return out
+",25,"[[5, 6, 7], [8, 0, 0]]"
+PyTorch,lm-1,"`logits` has shape `(b, n, V)`. In sequence i a phrase of `m` tokens begins at position `starts[i]`. Return the rows that score each sequence's phrase, shape `(b, m, V)`.","import torch as t
+
+
+def solve(logits, starts, m):
+    """"""Per-sequence rows that score the phrase.""""""
+    b = len(starts)
+    return logits[t.arange(b)[:, None], (starts - 1)[:, None] + t.arange(m)[None, :]]
+",30,"[[[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]], [[21.0, 22.0, 23.0], [24.0, 25.0, 26.0]]]"
+PyTorch,lm-1,"`lens` holds the length of each of b sequences and `width` is the width of the padded table. Return the attention mask, shape `(b, width)`: True where a real token sits, False on filler.","import torch as t
+
+
+def solve(lens, width):
+    """"""Attention mask from the lengths.""""""
+    return t.arange(width)[None, :] < lens[:, None]
+",35,"[[True, True, True], [True, False, False]]"
+PyTorch,lm-1,"`ids` is a padded table of token ids, shape `(b, n)`, and `pad` is the filler id, which no real token uses. Return the number of real tokens in each row, shape `(b,)`.","import torch as t
+
+
+def solve(ids, pad):
+    """"""Length of each sequence in a padded table.""""""
+    return (ids != pad).sum(dim=1)
+",30,"[3, 1]"
+PyTorch,lm-1,"`logits` has shape `(b, n, V)` and came from a right-padded batch. `lens` holds the number of real tokens in each sequence. For every sequence, return the row of scores for the token that would come NEXT after its last real token. Shape `(b, V)`.","import torch as t
+
+
+def solve(logits, lens):
+    """"""Next-token scores for each sequence of a padded batch.""""""
+    b = len(lens)
+    return logits[t.arange(b), lens - 1]
+",40,"[[12.0, 13.0, 14.0], [18.0, 19.0, 20.0]]"
+PyTorch,lm-1,"`logp` has shape `(b, n, V)` and already holds log-probabilities. In sequence i a phrase begins at position `starts[i]`, and `phrases`, shape `(b, m)`, holds each sequence's m phrase token ids. Return the log-probability of every phrase token, shape `(b, m)`.","import torch as t
+
+
+def solve(logp, starts, phrases):
+    """"""Log-probability of each phrase token in each sequence.""""""
+    b = len(starts)
+    m = len(phrases[0])
+    pos = (starts - 1)[:, None] + t.arange(m)[None, :]
+    return logp[t.arange(b)[:, None], pos, phrases]
+",55,"[[2.0, 3.0], [22.0, 25.0]]"
+PyTorch,lm-1,"`befores` is a list of 1-D tensors of token ids with different lengths, and `phrase` is a 1-D tensor of token ids. Return one table in which row i is sequence i followed directly by the phrase, with `pad` in the unused entries on the right.","import torch as t
+
+
+def solve(befores, phrase, pad):
+    """"""A padded batch of forced sequences.""""""
+    lens = t.tensor([len(q) for q in befores])
+    m = len(phrase)
+    out = t.full((len(befores), lens.max().item() + m), pad)
+    i = 0
+    for q in befores:
+        out[i, :len(q)] = q
+        out[i, len(q):len(q) + m] = phrase
+        i += 1
+    return out
+",55,"[[5, 6, 7, 1, 2], [8, 1, 2, 0, 0]]"
+PyTorch,lm-1,"`vals` has shape `(b, n)` and holds one number per position of a padded batch. `mask`, same shape, is True where a real token sits. Return the sum of each row's numbers over its real positions only, shape `(b,)`.","import torch as t
+
+
+def solve(vals, mask):
+    """"""Row sums that ignore filler positions.""""""
+    return t.where(mask, vals, 0.0).sum(dim=1)
+",40,"[6.0, 4.0]"
+PyTorch,lm-1,"`ids` has shape `(b, n)` and is a right-padded batch of forced sequences; `logits`, shape `(b, n, V)`, is the model's raw output for it. In sequence i a phrase of `m` tokens begins at position `starts[i]`. Return the log-probability of each sequence's own phrase given the text before it, shape `(b,)`.","import torch as t
+import einops
+
+
+def solve(logits, ids, starts, m):
+    """"""Phrase log-probability for each row of a padded batch.""""""
+    b = len(ids)
+    rows = t.arange(b)[:, None]
+    pos = starts[:, None] + t.arange(m)[None, :]
+    logp = t.log_softmax(logits, dim=-1)
+    per_token = logp[rows, pos - 1, ids[rows, pos]]
+    return einops.reduce(per_token, ""batch tok -> batch"", ""sum"")
+",80,"[-0.44019, -9.024865]"
+PyTorch,lm-1,"`prefix`, `reasoning` and `phrase` are 1-D tensors of token ids, and `bounds` is a 1-D tensor of sentence boundaries in the reasoning. Return a right-padded table with one forced sequence per boundary: the prefix, the reasoning up to that boundary, then the phrase. Unused entries hold `pad`.","import torch as t
+
+
+def solve(prefix, reasoning, phrase, bounds, pad):
+    """"""One padded batch with a forced sequence per boundary.""""""
+    width = len(prefix) + bounds.max().item() + len(phrase)
+    out = t.full((len(bounds), width), pad)
+    i = 0
+    for b in bounds.tolist():
+        q = t.cat([prefix, reasoning[:b], phrase])
+        out[i, :len(q)] = q
+        i += 1
+    return out
+",75,"[[90, 91, 10, 70, 71, 0, 0], [90, 91, 10, 11, 12, 70, 71]]"
+PyTorch,lm-1,"`ids` has shape `(b, n)` and is a right-padded batch of forced sequences, with `pad` as the filler id (no real token uses it). `logits`, shape `(b, n, V)`, is the model's raw output. In every sequence the phrase is the LAST `m` real tokens. Return the log-probability of each sequence's phrase given the text before it, shape `(b,)`.","import torch as t
+import einops
+
+
+def solve(logits, ids, pad, m):
+    """"""Phrase log-probability when the phrase ends each sequence.""""""
+    starts = (ids != pad).sum(dim=1) - m
+    b = len(ids)
+    rows = t.arange(b)[:, None]
+    pos = starts[:, None] + t.arange(m)[None, :]
+    logp = t.log_softmax(logits, dim=-1)
+    per_token = logp[rows, pos - 1, ids[rows, pos]]
+    return einops.reduce(per_token, ""batch tok -> batch"", ""sum"")
+",85,"[-4.432351, -9.19873]"
+PyTorch,lm-1,"`traces` is a list of 1-D tensors, one per rollout, each holding the phrase log-probability at every sentence boundary of that rollout. The traces have different lengths. Return the highest score of each rollout, shape `(rollouts,)`, by way of one padded table.","import torch as t
+import einops
+
+
+def solve(traces):
+    """"""Highest score in each rollout.""""""
+    lens = t.tensor([len(q) for q in traces])
+    table = t.full((len(traces), lens.max().item()), float(""-inf""))
+    i = 0
+    for q in traces:
+        table[i, :len(q)] = q
+        i += 1
+    return einops.reduce(table, ""rollout pos -> rollout"", ""max"")
+",30,"[-4.0, -6.0]"
+PyTorch,lm-1,"`table` has shape `(prompt, rollout, pos)` and holds phrase log-probabilities. Return each prompt's score using only its first `k` rollouts, shape `(prompt,)`.","import torch as t
+import einops
+
+
+def solve(table, k):
+    """"""Prompt scores from the first k rollouts.""""""
+    return einops.reduce(table[:, :k], ""prompt rollout pos -> prompt"", ""max"")
+",25,"[-8.0, -4.0]"
+PyTorch,lm-1,"`table` has shape `(rollout, pos)` and holds one prompt's phrase log-probabilities, padded with minus infinity. Return the prompt's score as a Python float.","import torch as t
+import einops
+
+
+def solve(table):
+    """"""Score of one prompt.""""""
+    return einops.reduce(table, ""rollout pos -> "", ""max"").item()
+",30,-4.0
+PyTorch,lm-1,"`table` has shape `(rollout, pos)` and holds one prompt's phrase log-probabilities, padded with minus infinity. Return the index of the rollout that contains the prompt's highest score, as a Python int.","import torch as t
+import einops
+
+
+def solve(table):
+    """"""Which rollout produced the prompt's score.""""""
+    return t.argmax(einops.reduce(table, ""rollout pos -> rollout"", ""max"")).item()
+",40,1
+PyTorch,lm-1,"`table` has shape `(rollout, pos)` and holds one prompt's phrase log-probabilities, padded with minus infinity. Return the number of sentence boundaries each rollout really had, shape `(rollout,)`.","import torch as t
+
+
+def solve(table):
+    """"""How many real scores each rollout has.""""""
+    return (table != float(""-inf"")).sum(dim=1)
+",35,"[3, 1]"
+PyTorch,lm-1,"`table` has shape `(prompt, rollout, pos)` and holds phrase log-probabilities. Return, for each prompt, whether its score from the first `k` rollouts is above the threshold `thr`. Boolean tensor of shape `(prompt,)`.","import torch as t
+import einops
+
+
+def solve(table, k, thr):
+    """"""Which prompts the monitor flags at a threshold.""""""
+    return einops.reduce(table[:, :k], ""prompt rollout pos -> prompt"", ""max"") > thr
+",40,"[False, True]"
+PyTorch,lm-1,"`table` has shape `(prompt, rollout, pos)` and holds phrase log-probabilities. Return how much each prompt's score rises when all its rollouts are used instead of only the first one. Shape `(prompt,)`.","import torch as t
+import einops
+
+
+def solve(table):
+    """"""Gain in score from using every rollout.""""""
+    every = einops.reduce(table, ""prompt rollout pos -> prompt"", ""max"")
+    first = einops.reduce(table[:, :1], ""prompt rollout pos -> prompt"", ""max"")
+    return every - first
+",50,"[5.0, 2.0]"
+PyTorch,lm-1,"`table` has shape `(prompt, rollout, pos)` and holds phrase log-probabilities. Return, for each prompt, whether its score from the first `k` rollouts already equals its score from all rollouts. Boolean tensor of shape `(prompt,)`.","import torch as t
+import einops
+
+
+def solve(table, k):
+    """"""Whether the first k rollouts already contain the best score.""""""
+    part = einops.reduce(table[:, :k], ""prompt rollout pos -> prompt"", ""max"")
+    return part == einops.reduce(table, ""prompt rollout pos -> prompt"", ""max"")
+",50,"[True, False]"
+PyTorch,lm-1,"`traces` is a list of 1-D tensors, one per rollout of a single prompt, each holding the phrase log-probability at every sentence boundary. The traces have different lengths. Return the prompt's score using only the first `k` rollouts, as a Python float.","import torch as t
+import einops
+
+
+def solve(traces, k):
+    """"""Score of one prompt from ragged traces at k rollouts.""""""
+    lens = t.tensor([len(q) for q in traces])
+    table = t.full((len(traces), lens.max().item()), float(""-inf""))
+    i = 0
+    for q in traces:
+        table[i, :len(q)] = q
+        i += 1
+    return einops.reduce(table[:k], ""rollout pos -> "", ""max"").item()
+",65,-1.0
+PyTorch,lm-1,"`table` has shape `(prompt, rollout, pos)` and holds phrase log-probabilities. `ks` is a list of rollout counts. Return the prompt scores for each count, shape `(len(ks), prompt)`: row i uses the first `ks[i]` rollouts.","import torch as t
+import einops
+
+
+def solve(table, ks):
+    """"""Prompt scores at several rollout counts.""""""
+    return t.stack([einops.reduce(table[:, :k], ""prompt rollout pos -> prompt"", ""max"") for k in ks])
+",70,"[[-8.0, -4.0], [-3.0, -4.0], [-3.0, -2.0]]"
+PyTorch,lm-1,"A batch of forced sequences for one prompt was scored: `scores`, shape `(N,)`, holds the phrase log-probability of each, and `rollout_of`, shape `(N,)`, holds the index of the rollout each sequence came from. Return the prompt's score using only rollouts with index below `k`, as a Python float.","import torch as t
+
+
+def solve(scores, rollout_of, k):
+    """"""Prompt score from a flat batch of forced sequences.""""""
+    return t.where(rollout_of < k, scores, float(""-inf"")).max().item()
+",70,-4.0
+PyTorch,lm-1,"`pos` holds the scores of the evaluation prompts and `neg` the scores of the deployment prompts. Return the AUROC as a Python float: the share of pairs in which the evaluation prompt scores higher, with a tie counted as half.","import torch as t
+
+
+def solve(pos, neg):
+    """"""AUROC of evaluation scores against deployment scores.""""""
+    wins = (pos[:, None] > neg[None, :]).sum()
+    ties = (pos[:, None] == neg[None, :]).sum()
+    return ((wins + 0.5 * ties) / (len(pos) * len(neg))).item()
+",35,0.75
+PyTorch,lm-1,"`aucs` holds the AUROC of each of many resamples. Return the two ends of the 95% confidence interval, as a tensor of shape `(2,)`.","import torch as t
+
+
+def solve(aucs):
+    """"""95% interval from resampled AUROCs.""""""
+    return t.quantile(aucs, t.tensor([0.025, 0.975]))
+",25,"[0.5125, 0.9375]"
+PyTorch,lm-1,"`pos` holds the scores of the evaluation prompts and `neg` the scores of the deployment prompts. Return the number of pairs (one of each) in which the evaluation prompt scores strictly higher, as a Python int.","import torch as t
+
+
+def solve(pos, neg):
+    """"""Number of pairs the evaluation prompt wins.""""""
+    return (pos[:, None] > neg[None, :]).sum().item()
+",35,4
+PyTorch,lm-1,"`pos` holds the scores of the evaluation prompts and `neg` the scores of the deployment prompts. For each evaluation prompt, return the fraction of deployment prompts it scores strictly higher than. Shape like `pos`.","import torch as t
+
+
+def solve(pos, neg):
+    """"""Share of deployment prompts each evaluation prompt beats.""""""
+    return (pos[:, None] > neg[None, :]).sum(dim=1) / len(neg)
+",40,"[1.0, 0.5, 0.5]"
+PyTorch,lm-1,"`scores` holds one score per prompt and `is_eval` is a boolean tensor of the same shape, True for evaluation prompts and False for deployment prompts. Return the AUROC as a Python float, with a tie counted as half.","import torch as t
+
+
+def solve(scores, is_eval):
+    """"""AUROC from scores and labels.""""""
+    pos = scores[is_eval]
+    neg = scores[~is_eval]
+    wins = (pos[:, None] > neg[None, :]).sum()
+    ties = (pos[:, None] == neg[None, :]).sum()
+    return ((wins + 0.5 * ties) / (len(pos) * len(neg))).item()
+",50,0.75
+PyTorch,lm-1,"Return a table of resampling indices of shape `(B, n)`: every entry is a whole number from 0 to n − 1 inclusive, drawn uniformly with the generator `g`.","import torch as t
+
+
+def solve(n, B, g):
+    """"""Bootstrap index table.""""""
+    return t.randint(0, n, (B, n), generator=g)
+",35,"[[2, 0, 2], [0, 1, 0], [1, 1, 1], [0, 2, 2]]"
+PyTorch,lm-1,"`pos` and `neg` hold the evaluation and deployment scores. `idx_pos`, shape `(B, n)`, and `idx_neg`, shape `(B, m)`, hold resampling indices into them. Return the AUROC of each of the B resamples, shape `(B,)`, with a tie counted as half.","import torch as t
+
+
+def solve(pos, neg, idx_pos, idx_neg):
+    """"""AUROC of every bootstrap resample.""""""
+    P = pos[idx_pos]
+    N = neg[idx_neg]
+    wins = (P[:, :, None] > N[:, None, :]).sum(dim=2).sum(dim=1)
+    ties = (P[:, :, None] == N[:, None, :]).sum(dim=2).sum(dim=1)
+    aucs = (wins + 0.5 * ties) / (len(pos) * len(neg))
+    return aucs
+",60,"[0.833333, 0.5, 1.0, 0.833333]"
+PyTorch,lm-1,"`aucs` holds the AUROC of each of many resamples. Return True if the 95% confidence interval lies entirely above 0.5, else False.","import torch as t
+
+
+def solve(aucs):
+    """"""Whether the monitor is reliably better than chance.""""""
+    return (t.quantile(aucs, 0.025) > 0.5).item()
+",40,True
+PyTorch,lm-1,"`ev` and `dep` have shape `(prompt, rollout, pos)` and hold the phrase log-probabilities for evaluation prompts and deployment prompts. `ks` is a list of rollout counts. For each count k, score every prompt with its first k rollouts and compute the AUROC, with a tie counted as half. Return the AUROCs as a 1-D tensor with one entry per count, in the order given.","import torch as t
+import einops
+
+
+def solve(ev, dep, ks):
+    """"""AUROC at each rollout count.""""""
+    out = t.zeros(len(ks))
+    i = 0
+    for k in ks:
+        pos = einops.reduce(ev[:, :k], ""prompt rollout pos -> prompt"", ""max"")
+        neg = einops.reduce(dep[:, :k], ""prompt rollout pos -> prompt"", ""max"")
+        wins = (pos[:, None] > neg[None, :]).sum()
+        ties = (pos[:, None] == neg[None, :]).sum()
+        out[i] = (wins + 0.5 * ties) / (len(pos) * len(neg))
+        i += 1
+    return out
+",85,"[0.5, 0.5]"
+PyTorch,lm-1,"`pos` and `neg` hold the evaluation and deployment scores. `idx_pos`, shape `(B, n)`, and `idx_neg`, shape `(B, m)`, hold resampling indices into them. Return the two ends of the 95% confidence interval of the AUROC (a tie counts as half), as a tensor of shape `(2,)`.","import torch as t
+
+
+def solve(pos, neg, idx_pos, idx_neg):
+    """"""Bootstrap 95% interval of the AUROC.""""""
+    P = pos[idx_pos]
+    N = neg[idx_neg]
+    wins = (P[:, :, None] > N[:, None, :]).sum(dim=2).sum(dim=1)
+    ties = (P[:, :, None] == N[:, None, :]).sum(dim=2).sum(dim=1)
+    aucs = (wins + 0.5 * ties) / (len(pos) * len(neg))
+    return t.quantile(aucs, t.tensor([0.025, 0.975]))
+",85,"[0.525, 0.9875]"
+PyTorch,lm-1,"Two monitors scored the same prompts. `pos_a` and `neg_a` hold the first monitor's scores for the evaluation and deployment prompts, `pos_b` and `neg_b` the second monitor's. Return the first monitor's AUROC minus the second's, as a Python float. A tie counts as half.","import torch as t
+
+
+def solve(pos_a, neg_a, pos_b, neg_b):
+    """"""AUROC difference between two monitors.""""""
+    wa = (pos_a[:, None] > neg_a[None, :]).sum() + 0.5 * (pos_a[:, None] == neg_a[None, :]).sum()
+    wb = (pos_b[:, None] > neg_b[None, :]).sum() + 0.5 * (pos_b[:, None] == neg_b[None, :]).sum()
+    return ((wa - wb) / (len(pos_a) * len(neg_a))).item()
+",80,0.083333
+PyTorch,lm-1,"`flags` has shape `(prompt, rollout)` and is True where the judge found that a rollout voices a suspicion of being tested. Return each prompt's verbalisation score from its first `k` rollouts: the fraction of them that were flagged. Shape `(prompt,)`.","import torch as t
+import einops
+
+
+def solve(flags, k):
+    """"""Fraction of the first k rollouts flagged.""""""
+    return einops.reduce(flags[:, :k].float(), ""prompt rollout -> prompt"", ""mean"")
+",25,"[0.5, 0.0, 1.0]"
+PyTorch,lm-1,`primary` and `control` each hold one score per prompt: the monitor's score with the test phrase and with the control phrase. Return the control-corrected score of each prompt.,"import torch as t
+
+
+def solve(primary, control):
+    """"""Test-phrase score with the control-phrase score removed.""""""
+    return primary - control
+",15,"[3.0, 0.5, -2.0]"
+PyTorch,lm-1,"`flags` has shape `(prompt, rollout)` and is True where the judge flagged a rollout. Return, for each prompt, whether at least one of its first `k` rollouts was flagged. Boolean tensor of shape `(prompt,)`.","import torch as t
+
+
+def solve(flags, k):
+    """"""Whether any of the first k rollouts was flagged.""""""
+    return flags[:, :k].any(dim=1)
+",30,"[True, False, True]"
+PyTorch,lm-1,"`flags_eval` and `flags_dep` have shape `(prompt, rollout)` and hold the judge's flags for evaluation prompts and deployment prompts. Score each prompt by the fraction of its first `k` rollouts that were flagged, and return the AUROC of that score as a Python float. A tie counts as half.","import torch as t
+import einops
+
+
+def solve(flags_eval, flags_dep, k):
+    """"""AUROC of the verbalisation baseline at k rollouts.""""""
+    pos = einops.reduce(flags_eval[:, :k].float(), ""prompt rollout -> prompt"", ""mean"")
+    neg = einops.reduce(flags_dep[:, :k].float(), ""prompt rollout -> prompt"", ""mean"")
+    wins = (pos[:, None] > neg[None, :]).sum()
+    ties = (pos[:, None] == neg[None, :]).sum()
+    return ((wins + 0.5 * ties) / (len(pos) * len(neg))).item()
+",60,0.666667
+PyTorch,lm-1,"`flags` has shape `(prompt, rollout)` and is True where the judge flagged a rollout. Return the number of prompts with NO flag among their first `k` rollouts, as a Python int.","import torch as t
+
+
+def solve(flags, k):
+    """"""How many prompts score exactly zero on the baseline.""""""
+    return (flags[:, :k].sum(dim=1) == 0).sum().item()
+",40,1
+PyTorch,lm-1,"`primary` and `control` have shape `(prompt, rollout, pos)` and hold the phrase log-probabilities for the test phrase and for the control phrase, with no padding. Score each prompt with each phrase (the maximum over its rollouts and positions) and return the test-phrase score minus the control-phrase score. Shape `(prompt,)`.","import torch as t
+import einops
+
+
+def solve(primary, control):
+    """"""Control-corrected prompt scores from the two tables.""""""
+    p = einops.reduce(primary, ""prompt rollout pos -> prompt"", ""max"")
+    c = einops.reduce(control, ""prompt rollout pos -> prompt"", ""max"")
+    return p - c
+",50,"[-1.0, 5.0]"
+PyTorch,lm-1,"`scores` holds one monitor score per prompt and `lens` the number of tokens in each prompt. Return the scores of the prompts whose length is at least `lo` and below `hi`, in their original order.","import torch as t
+
+
+def solve(scores, lens, lo, hi):
+    """"""Scores of prompts inside a length band.""""""
+    return scores[(lens >= lo) & (lens < hi)]
+",35,"[1.0, 2.0, 2.0]"
+PyTorch,lm-1,"`pos` and `neg` hold a score for the evaluation prompts and for the deployment prompts. The score may separate the groups in either direction. Return how well it separates them, as a Python float: its AUROC (a tie counts as half), or one minus that if the AUROC is below 0.5.","import torch as t
+
+
+def solve(pos, neg):
+    """"""Separation of a score regardless of direction.""""""
+    wins = (pos[:, None] > neg[None, :]).sum()
+    ties = (pos[:, None] == neg[None, :]).sum()
+    auc = ((wins + 0.5 * ties) / (len(pos) * len(neg))).item()
+    return max(auc, 1 - auc)
+",50,0.833333
+PyTorch,lm-1,"`flags_eval` and `flags_dep` have shape `(prompt, rollout)` and hold the judge's flags for evaluation and deployment prompts. `ks` is a list of rollout counts. For each count k, score each prompt by the fraction of its first k rollouts that were flagged and compute the AUROC, with a tie counted as half. Return a 1-D tensor with one entry per count, in the order given.","import torch as t
+import einops
+
+
+def solve(flags_eval, flags_dep, ks):
+    """"""Verbalisation-baseline AUROC at each rollout count.""""""
+    out = t.zeros(len(ks))
+    i = 0
+    for k in ks:
+        pos = einops.reduce(flags_eval[:, :k].float(), ""prompt rollout -> prompt"", ""mean"")
+        neg = einops.reduce(flags_dep[:, :k].float(), ""prompt rollout -> prompt"", ""mean"")
+        wins = (pos[:, None] > neg[None, :]).sum()
+        ties = (pos[:, None] == neg[None, :]).sum()
+        out[i] = (wins + 0.5 * ties) / (len(pos) * len(neg))
+        i += 1
+    return out
+",85,"[0.666667, 0.583333, 0.916667]"
+PyTorch,lm-1,"`scores` holds one monitor score per prompt, `lens` the number of tokens in each prompt, and `is_eval` is True for evaluation prompts. Keeping only the prompts whose length is at least `lo` and below `hi`, return the AUROC of the scores as a Python float. A tie counts as half.","import torch as t
+
+
+def solve(scores, lens, is_eval, lo, hi):
+    """"""AUROC among prompts of similar length.""""""
+    band = (lens >= lo) & (lens < hi)
+    pos = scores[band & is_eval]
+    neg = scores[band & ~is_eval]
+    wins = (pos[:, None] > neg[None, :]).sum()
+    ties = (pos[:, None] == neg[None, :]).sum()
+    return ((wins + 0.5 * ties) / (len(pos) * len(neg))).item()
+",80,0.5
+PyTorch,lm-1,"`scores` holds one monitor score per prompt, `lens` the number of tokens in each prompt, and `is_eval` is True for evaluation prompts. Return a tensor of shape `(2,)`: the AUROC of the monitor's scores, then the AUROC obtained when the prompt length itself is used as the score. A tie counts as half.","import torch as t
+
+
+def solve(scores, lens, is_eval):
+    """"""Monitor AUROC beside the length-only AUROC.""""""
+    out = t.zeros(2)
+    i = 0
+    for s in [scores, lens]:
+        pos = s[is_eval]
+        neg = s[~is_eval]
+        wins = (pos[:, None] > neg[None, :]).sum()
+        ties = (pos[:, None] == neg[None, :]).sum()
+        out[i] = (wins + 0.5 * ties) / (len(pos) * len(neg))
+        i += 1
+    return out
+",85,"[0.833333, 0.777778]"

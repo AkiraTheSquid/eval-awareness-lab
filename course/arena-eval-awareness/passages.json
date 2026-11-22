@@ -1,0 +1,98 @@
+[
+  {
+    "id": "aea.p.signal",
+    "source": "aea-goodfire",
+    "locator": "Introduction",
+    "text": "at the start of the CoT, before sampling any rollout. Also, the monitor is largely unaffected by whether a rollout verbalizes eval awareness. This suggests that the probability that a rollout contains verbalized evaluation awareness is primarily set by the prompt rather than emerging over the chain of thought. Author: Santiago Aranguri (Goodfire)"
+  },
+  {
+    "id": "aea.p.phrase",
+    "source": "aea-goodfire",
+    "locator": "Methods",
+    "text": "The logit monitor calculates the probability the model would produce a prespecified eval-aware sentence (such as \"The user might be testing\") at every sentence boundary in the chain of thought. The logit monitor doesn’t require training: we token-force the eval-aware sentence, read the probability the model assigns to each of the tokens in the sentence, and multiply these to get the exact probability it would produce the sentence ( Appendix A )."
+  },
+  {
+    "id": "aea.p.readouts",
+    "source": "aea-heidari",
+    "locator": "Abstract",
+    "text": "We provide a systematic study of this phenomenon, by probing for it across six open-weight language models from four families, ranging from 7B to 49B, using three metrics. More precisely, we examine whether (i) being under evaluation is linearly represented within the models’ activations space, (ii) it is verbalized in their output tokens (as scored by an LLM-as-judge), and (iii) steering causally affects their behavior. For the open-checkpoint Olmo models, we further test these measures at every training stage. In doing so, we report that evaluation awareness is linearly decodable from the residual streams of every model (best AUROC ≥ 0.7 \\geq 0.7 ). By contrast, these representations align only in part with verbalization: their correlations and mutual information are nonzero in some settings, yet vary substantially across models, layers, and readout choices. Nevertheless, steering along probe-derived directions can shift the verbalization scores."
+  },
+  {
+    "id": "aea.p.scores",
+    "source": "aea-goodfire",
+    "locator": "Results, Figure 2",
+    "text": "For each prompt with k rollouts, the logit monitor’s score is the maximum of the logit monitor across rollouts and CoT positions. The verbalization monitor’s score is the fraction of those rollouts showing verbalized eval awareness, as judged by an LLM."
+  },
+  {
+    "id": "aea.p.ranking",
+    "source": "aea-goodfire",
+    "locator": "Results, Figure 2",
+    "text": "On separating evaluation from deployment prompts, the logit monitor reaches AUROC 0.79 from a single rollout while the verbalization monitor baseline asymptotes at 0.75 even at 100 rollouts (Figure 2, left). On predicting which evaluation prompts will produce at least one rollout displaying verbalized eval awareness out of 100, the logit monitor at one rollout outperforms the verbalization monitor at 10 rollouts (Figure 2, right)."
+  },
+  {
+    "id": "aea.p.variance",
+    "source": "aea-goodfire",
+    "locator": "Results, Figure 1",
+    "text": "On Fortress, whether the rollout verbalizes eval awareness explains 0.4% of the variance in the logit monitor’s score (the maximum of the logit monitor across CoT positions). In contrast, whether the prompt that the rollout comes from ever produces a rollout with verbalized eval awareness explains 24.9%."
+  },
+  {
+    "id": "aea.p.targets",
+    "source": "aea-goodfire",
+    "locator": "Results",
+    "text": "On Fortress, the probability of \"The user might be testing\" correlates at 0.59 with \"This is clearly a test\" but only at 0.08 with \"This is a fictional scenario\", a phrase Kimi also produces in its CoT."
+  },
+  {
+    "id": "aea.p.confounds",
+    "source": "aea-goodfire",
+    "locator": "Appendix B",
+    "text": "Petri prompts include a system prompt, while WildChat prompts do not, which may inflate separability."
+  },
+  {
+    "id": "aea.p.transport",
+    "source": "aea-graders",
+    "locator": "Discussion of training awareness",
+    "text": "may just be training awareness: rewriting an eval-awareness probe's contrast statements to be about training yields a probe that scores prompts nearly identically."
+  },
+  {
+    "id": "aea.p.causal",
+    "source": "aea-companion",
+    "locator": "Summary",
+    "text": "Beyond correlation, we find that sentences displaying verbalized eval awareness in the chain of thought causally increase refusal. Removing such sentences and resampling continuations increases compliance by 8% overall and 34% for those containing safety keywords. Injecting sentences displaying verbalized eval awareness into the chain of thought increases refusal by up to 25% , with more specific and assertive sentences having the largest effect. Both experiments use Kimi K2.5 on the Fortress benchmark."
+  },
+  {
+    "id": "aea.p.strategy",
+    "source": "aea-needham",
+    "locator": "Abstract",
+    "text": "we measure how accurately models can distinguish between evaluation and deployment scenarios using multiple-choice questions (Section 4.1 ). We then examine models’ ability to identify the underlying purpose of evaluations (Section 4.2 )."
+  },
+  {
+    "id": "aea.p.faithfulness",
+    "source": "aea-chen",
+    "locator": "Testing for faithfulness",
+    "text": "we subtly fed a model a hint about the answer to an evaluation question we asked it, and then checked to see if it “admitted” using the hint when it explained its reasoning if it used the hint (we did this for the reasoning models Claude 3.7 Sonnet from Anthropic and R1 from DeepSeek 1 ). Some of the hints were correct and some were deliberately incorrect; the point was to observe how the model responded when they were provided."
+  },
+  {
+    "id": "aea.p.fawcett-ranking",
+    "source": "aea-fawcett",
+    "locator": "ROC curves and area under the curve, pp. 864–867",
+    "text": "the classiﬁer will rank a randomly chosen positive instance higher than a randomly chosen negative instance."
+  },
+  {
+    "id": "aea.p.fawcett-ties",
+    "source": "aea-fawcett",
+    "locator": "ROC curves and area under the curve, pp. 864–867",
+    "text": "the average of the pessimistic and optimistic segments"
+  },
+  {
+    "id": "aea.p.guide-ranking",
+    "source": "aea-research-guide",
+    "locator": "Application questions, research-level discussion",
+    "text": "AUROC can be interpreted as approximately the probability that the score ranks a randomly chosen positive example above a randomly chosen negative example."
+  },
+  {
+    "id": "aea.p.guide-budget",
+    "source": "aea-research-guide",
+    "locator": "Application questions, research-level discussion",
+    "text": "If a prompt has true verbalization probability \\(p\\), the probability that it receives the positive label is \\(1-(1-p)^{100}\\)."
+  }
+]

@@ -31,7 +31,9 @@ Every experiment should help answer one of them, or test a theory the course tea
 5. `docs/04-collab-protocol.md`: how you and the Linux agent talk through this repo.
 6. `docs/05-research-loop.md`: you are also expected to *find* good experiments: propose ideas, pilot
    them cheaply, decide kill / pivot / scale from the results, and track how good your predictions are.
-7. `reference/`: a validated implementation (run on Qwen3-32B on a rented GPU) and its results.
+7. `course/`: read-only copy of the Delta Drills course this feeds (conceptual lessons and questions,
+   the source papers' full text in `course/arena-eval-awareness/_sources/`, and the lm-1 code unit).
+8. `reference/`: a validated implementation (run on Qwen3-32B on a rented GPU) and its results.
 
 ## Hard rules
 

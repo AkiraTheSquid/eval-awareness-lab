@@ -1,0 +1,92 @@
+course:
+  id: arena-eval-awareness
+  title: ARENA · Evaluation Awareness
+  eyebrow: Goodfire paper study and evaluation-design practice
+  sections:
+  - aea-observe
+  - aea-results
+  - aea-validity
+  private_to:
+  - sethbgibson@gmail.com
+  public: false
+  default_on: false
+  link: arena-eval-awareness
+  lessons: true
+  prerequisite_evidence: direct
+sections:
+- id: aea-observe
+  title: What the monitor measures
+  color: '#2563EB'
+- id: aea-results
+  title: How to read the results
+  color: '#0F766E'
+- id: aea-validity
+  title: How to test the interpretation
+  color: '#7C3AED'
+concept_order:
+- aea-observe.signal
+- aea-observe.phrase
+- aea-observe.readouts
+- aea-results.scores
+- aea-results.pair-auc
+- aea-results.ranking
+- aea-results.any-flag
+- aea-results.variance
+- aea-results.targets
+- aea-validity.confounds
+- aea-validity.transport
+- aea-validity.causal
+- aea-validity.strategy
+- aea-validity.faithfulness
+question_order:
+- aea-observe.signal.direct-1
+- aea-observe.signal.direct-2
+- aea-observe.signal.transfer-1
+- aea-observe.phrase.direct-1
+- aea-observe.phrase.direct-2
+- aea-observe.phrase.transfer-1
+- aea-observe.readouts.direct-1
+- aea-observe.readouts.direct-2
+- aea-observe.readouts.transfer-1
+- aea-results.scores.direct-1
+- aea-results.scores.direct-2
+- aea-results.scores.transfer-1
+- aea-results.ranking.direct-1
+- aea-results.ranking.direct-2
+- aea-results.ranking.transfer-1
+- aea-results.variance.direct-1
+- aea-results.variance.direct-2
+- aea-results.variance.transfer-1
+- aea-results.targets.direct-1
+- aea-results.targets.direct-2
+- aea-results.targets.transfer-1
+- aea-validity.confounds.direct-1
+- aea-validity.confounds.direct-2
+- aea-validity.confounds.transfer-1
+- aea-validity.transport.direct-1
+- aea-validity.transport.direct-2
+- aea-validity.transport.transfer-1
+- aea-validity.causal.direct-1
+- aea-validity.causal.direct-2
+- aea-validity.causal.transfer-1
+- aea-validity.strategy.direct-1
+- aea-validity.strategy.direct-2
+- aea-validity.strategy.transfer-1
+- aea-validity.faithfulness.direct-1
+- aea-validity.faithfulness.direct-2
+- aea-validity.faithfulness.transfer-1
+- aea-synthesis.review
+- aea-observe.phrase.mc-1
+- aea-observe.phrase.mc-2
+- aea-observe.phrase.mc-3
+- aea-results.scores.mc-1
+- aea-results.scores.mc-2
+- aea-results.scores.mc-3
+- aea-results.pair-auc.mc-1
+- aea-results.pair-auc.mc-2
+- aea-results.pair-auc.mc-3
+- aea-results.any-flag.mc-1
+- aea-results.any-flag.mc-2
+- aea-results.any-flag.mc-3
+- aea-mixed.rollout-ranking
+- aea-mixed.repeated-sampling

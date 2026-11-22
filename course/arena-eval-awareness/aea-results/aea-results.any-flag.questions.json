@@ -1,0 +1,116 @@
+[
+  {
+    "id": "aea-results.any-flag.mc-1",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-results.any-flag"
+    ],
+    "prompt": "A prompt's chance of a verbalization flag on each independent rollout is 0.20. What is the chance of at least one flag across two rollouts?",
+    "reference": "Both rolls are silent with chance 0.64. Subtract from one.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.40$",
+        "why": "Adding both chances double counts the case in which both flag.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "$0.36$",
+        "why": "Both rolls are silent with chance 0.64. Subtract from one.",
+        "correct": true
+      },
+      {
+        "id": "c",
+        "text": "$0.04$",
+        "why": "This is the chance that both flag.",
+        "correct": false
+      },
+      {
+        "id": "d",
+        "text": "$0.64$",
+        "why": "This is the chance that neither flags.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "aea-results.any-flag.mc-2",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-results.any-flag"
+    ],
+    "prompt": "A prompt has a 10% chance of a positive flag on each independent sample. For three draws, which expression gives the probability that it receives an ever-positive label?",
+    "reference": "Subtract the probability that all three samples are negative.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.1^3$",
+        "why": "Requires all three samples to be positive.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "$0.9^3$",
+        "why": "Computes three negative samples.",
+        "correct": false
+      },
+      {
+        "id": "c",
+        "text": "$1-0.9^3$",
+        "why": "Subtract the probability that all three samples are negative.",
+        "correct": true
+      },
+      {
+        "id": "d",
+        "text": "$3(0.1)$",
+        "why": "Adds overlapping events without correcting for overlap.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "aea-results.any-flag.mc-3",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-results.any-flag"
+    ],
+    "prompt": "A monitoring team samples two independent responses to a question. Each response is flagged with probability 0.30. What proportion of such two-response sets should contain at least one flag?",
+    "reference": "Two misses have probability 0.49, leaving 0.51 for at least one flag.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.51$",
+        "why": "Two misses have probability 0.49, leaving 0.51 for at least one flag.",
+        "correct": true
+      },
+      {
+        "id": "b",
+        "text": "$0.09$",
+        "why": "This requires both flags.",
+        "correct": false
+      },
+      {
+        "id": "c",
+        "text": "$0.49$",
+        "why": "This counts the all-miss outcome.",
+        "correct": false
+      },
+      {
+        "id": "d",
+        "text": "$0.60$",
+        "why": "This double counts two-flag outcomes.",
+        "correct": false
+      }
+    ]
+  }
+]

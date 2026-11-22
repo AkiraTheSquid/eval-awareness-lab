@@ -1,0 +1,8 @@
+{
+  "min_prereq_weight": 0.5,
+  "terms": {
+    "aea-observe.phrase": [{"term": "conditional token probability", "pattern": "conditional token probabilit(?:y|ies)"}],
+    "aea-results.pair-auc": [{"term": "cross-group pairs"}],
+    "aea-results.any-flag": [{"term": "all-miss event"}]
+  }
+}

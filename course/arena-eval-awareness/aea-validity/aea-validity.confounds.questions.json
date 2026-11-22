@@ -1,0 +1,59 @@
+[
+  {
+    "id": "aea-validity.confounds.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-validity.confounds"
+    ],
+    "prompt": "Fortress prompts are usually longer than WildChat prompts in a test sample. Explain one way this could inflate the awareness interpretation and propose a matched check.",
+    "reference": "Length may distinguish sources or provide more opportunities for high scores independently of awareness. Compare length-matched items or controlled length variants, and report the length-only baseline. At matched length, attenuation would support the shortcut account.",
+    "expectations": [
+      "Length may distinguish sources or provide more opportunities for high scores independently of awareness.",
+      "Compare length-matched items or controlled length variants, and report the length-only baseline.",
+      "At matched length, attenuation would support the shortcut account."
+    ],
+    "misconceptions": [
+      "Treats dataset provenance as ground truth about the model’s state."
+    ]
+  },
+  {
+    "id": "aea-validity.confounds.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.confounds"
+    ],
+    "prompt": "A researcher evaluates prompts with a standardized system message. Deployment prompts have no system message. Design a comparison that tests whether message presence drives the ranking.",
+    "reference": "Cross message presence with source or use a common system message for both groups. Check whether the score tracks the message condition within sources or retains separation at fixed format. Scores tracking message presence across both sources would support a formatting shortcut.",
+    "expectations": [
+      "Cross message presence with source or use a common system message for both groups.",
+      "Check whether the score tracks the message condition within sources or retains separation at fixed format.",
+      "Scores tracking message presence across both sources would support a formatting shortcut."
+    ],
+    "misconceptions": [
+      "Treats dataset provenance as ground truth about the model’s state."
+    ]
+  },
+  {
+    "id": "aea-validity.confounds.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.confounds"
+    ],
+    "prompt": "An exam-detection system ranks synthetic coding tasks above genuine help requests. Design four matched conditions that distinguish benchmark-like appearance from actual testing status.",
+    "reference": "Cross actual test or deployment status with benchmark-like or natural phrasing while holding task content fixed. A shortcut follows appearance in both actual settings. An invisible assignment cannot be recovered from otherwise identical inputs.",
+    "expectations": [
+      "Cross actual test or deployment status with benchmark-like or natural phrasing while holding task content fixed.",
+      "A shortcut follows appearance in both actual settings.",
+      "An invisible assignment cannot be recovered from otherwise identical inputs."
+    ],
+    "misconceptions": [
+      "Treats dataset provenance as ground truth about the model’s state."
+    ]
+  }
+]

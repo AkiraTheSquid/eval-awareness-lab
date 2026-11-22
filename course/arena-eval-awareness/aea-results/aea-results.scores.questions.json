@@ -1,0 +1,173 @@
+[
+  {
+    "id": "aea-results.scores.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-results.scores"
+    ],
+    "prompt": "An evaluator records three traces with peak scores of 0.07, 0.11 and 0.09. The 0.11 trace was never flagged by the judge. Evaluate a colleague’s decision to discard that trace before computing the paper’s logit score.",
+    "reference": "Goodfire takes the peak over inspected traces whether they were flagged or not. The resulting score is 0.11. Discarding the top-scoring trace changes the specified score.",
+    "expectations": [
+      "The logit maximum includes the unflagged trace.",
+      "The highest of the three scores is 0.11.",
+      "Removing an inspected trace changes the quantity being reported."
+    ],
+    "misconceptions": [
+      "Averages the logit score or overlooks the extra chances created by a larger search budget."
+    ]
+  },
+  {
+    "id": "aea-results.scores.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-results.scores"
+    ],
+    "prompt": "A benchmark’s responses have twice as many scored boundaries as the comparison corpus. Explain how this can influence a max-based comparison even if the per-boundary distributions match.",
+    "reference": "More boundaries give additional chances for a high maximum. Compare equal boundary budgets or test a boundary-count baseline. The per-boundary distribution need not improve for the maximum to increase.",
+    "expectations": [
+      "More boundaries give additional chances for a high maximum.",
+      "Compare equal boundary budgets or test a boundary-count baseline.",
+      "The per-boundary distribution need not improve for the maximum to increase."
+    ],
+    "misconceptions": [
+      "Averages the logit score or overlooks the extra chances created by a larger search budget."
+    ]
+  },
+  {
+    "id": "aea-results.scores.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-results.scores"
+    ],
+    "prompt": "Two evaluation traces produce scores 0.07 and 0.09 before their token cap, then 0.21 after it. Two deployment traces produce 0.08 and 0.14 within the same cap. Compare the evaluation and deployment scores at the fixed cap.",
+    "reference": "The evaluation prompt scores 0.09. The deployment prompt scores 0.14. The late peak is outside the common search window and cannot enter the capped comparison.",
+    "expectations": [
+      "The evaluation peak within the cap is 0.09.",
+      "The deployment peak within the cap is 0.14.",
+      "The later evaluation value is excluded from this comparison."
+    ],
+    "misconceptions": [
+      "Averages the logit score or overlooks the extra chances created by a larger search budget."
+    ]
+  },
+  {
+    "id": "aea-results.scores.mc-1",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-results.scores"
+    ],
+    "prompt": "A prompt yields two rollouts. The first supplies one inspected boundary with token probabilities 0.5 and 0.3. The second supplies boundaries with probabilities 0.4 and 0.4, then 0.2 and 0.5. Compute the prompt score.",
+    "reference": "The products are 0.15, 0.16 and 0.10, so the middle boundary supplies the largest value.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.10$",
+        "why": "Only uses the last boundary’s phrase probability.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "$0.15$",
+        "why": "Only uses the first rollout.",
+        "correct": false
+      },
+      {
+        "id": "c",
+        "text": "$0.16$",
+        "why": "The products are 0.15, 0.16 and 0.10, so the middle boundary supplies the largest value.",
+        "correct": true
+      },
+      {
+        "id": "d",
+        "text": "$0.41$",
+        "why": "This sums the products across boundaries.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "aea-results.scores.mc-2",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-results.scores"
+    ],
+    "prompt": "One trace has two candidate boundaries. The conditional token probabilities are 0.7 and 0.1 at the first, and 0.4 and 0.3 at the second. Which score does the logit monitor assign to this prompt?",
+    "reference": "Compute the products 0.07 and 0.12, then take their maximum.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.70$",
+        "why": "This picks the greatest individual token probability.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "$0.07$",
+        "why": "This is only the first boundary’s phrase score.",
+        "correct": false
+      },
+      {
+        "id": "c",
+        "text": "$0.12$",
+        "why": "Compute the products 0.07 and 0.12, then take their maximum.",
+        "correct": true
+      },
+      {
+        "id": "d",
+        "text": "$0.19$",
+        "why": "This adds the two boundary scores instead of taking their maximum.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "aea-results.scores.mc-3",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-results.scores"
+    ],
+    "prompt": "Before a cap, a trace reaches two boundaries with token probabilities 0.5 and 0.2, then 0.4 and 0.3. After the cap it reaches a boundary with probabilities 0.5 and 0.5. By how much does the cap reduce the prompt score?",
+    "reference": "Without the cap the maximum is 0.25. With the cap it is 0.12, giving a difference of 0.13.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.02$",
+        "why": "This compares only the two early boundaries and misses the later score.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "$0.13$",
+        "why": "Without the cap the maximum is 0.25. With the cap it is 0.12, giving a difference of 0.13.",
+        "correct": true
+      },
+      {
+        "id": "c",
+        "text": "$0.15$",
+        "why": "This uses the first score after setting the cap but overlooks the higher second score.",
+        "correct": false
+      },
+      {
+        "id": "d",
+        "text": "$0.25$",
+        "why": "Removing the third boundary does not remove every candidate.",
+        "correct": false
+      }
+    ]
+  }
+]

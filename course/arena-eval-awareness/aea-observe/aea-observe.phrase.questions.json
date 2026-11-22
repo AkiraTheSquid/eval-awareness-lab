@@ -1,0 +1,173 @@
+[
+  {
+    "id": "aea-observe.phrase.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-observe.phrase"
+    ],
+    "prompt": "At a boundary the first target token has probability 0.4. After this token the second target token has probability 0.2. The second token had probability 0.1 at the original boundary. Give the two-token probability and explain your choice of factors.",
+    "reference": "The probability is 0.08. The second factor is conditioned on the prefix including the first target token. Use the original prefix only for the first factor.",
+    "expectations": [
+      "The probability is 0.08.",
+      "The second factor is conditioned on the prefix including the first target token.",
+      "Use the original prefix only for the first factor."
+    ],
+    "misconceptions": [
+      "Multiplies probabilities from the same prefix or treats the phrase score as a belief probability."
+    ]
+  },
+  {
+    "id": "aea-observe.phrase.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-observe.phrase"
+    ],
+    "prompt": "After a generated sentence, the first token of a two-token target becomes three times more likely, but the conditional second token becomes six times less likely. A teammate predicts the complete target becomes more likely. Diagnose their prediction.",
+    "reference": "The full phrase becomes half as probable. Multiply the factor of three by the factor of one sixth. The increase in the first factor is outweighed by the decrease in the conditional second factor.",
+    "expectations": [
+      "The full phrase becomes half as probable.",
+      "Multiply the factor of three by the factor of one sixth.",
+      "The increase in the first factor is outweighed by the decrease in the conditional second factor."
+    ],
+    "misconceptions": [
+      "Multiplies probabilities from the same prefix or treats the phrase score as a belief probability."
+    ]
+  },
+  {
+    "id": "aea-observe.phrase.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-observe.phrase"
+    ],
+    "prompt": "A safety monitor for a tool-call model proposes multiplying probabilities shown by one next-token distribution to score a three-token command. Diagnose the approximation and specify the readout that would score the command correctly without running it.",
+    "reference": "Read each command token’s probability given the preceding context and all earlier command tokens. Multiply the conditional probabilities to get the probability of that exact continuation. The first token’s probability must use the original context, before adding any command tokens.",
+    "expectations": [
+      "Read each command token’s probability given the preceding context and all earlier command tokens.",
+      "Multiply the conditional probabilities to get the probability of that exact continuation.",
+      "The first token’s probability must use the original context, before adding any command tokens."
+    ],
+    "misconceptions": [
+      "Multiplies probabilities from the same prefix or treats the phrase score as a belief probability."
+    ]
+  },
+  {
+    "id": "aea-observe.phrase.mc-1",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-observe.phrase"
+    ],
+    "prompt": "A three-token testing phrase has successive conditional probabilities 0.6, 0.5 and 0.2. What is the probability of the complete phrase at that sentence boundary?",
+    "reference": "Multiply all three conditional probabilities.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.20$",
+        "why": "Uses only the last conditional probability.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "$0.06$",
+        "why": "Multiply all three conditional probabilities.",
+        "correct": true
+      },
+      {
+        "id": "c",
+        "text": "$0.30$",
+        "why": "Stops after multiplying the first two factors.",
+        "correct": false
+      },
+      {
+        "id": "d",
+        "text": "$0.433$",
+        "why": "Averages the probabilities rather than composing successive steps.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "aea-observe.phrase.mc-2",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-observe.phrase"
+    ],
+    "prompt": "The first target token has probability 0.3. The next token has probability 0.4 after supplying the first, and 0.1 in the original context. What is the full sequence probability?",
+    "reference": "Multiply 0.3 by the conditional probability 0.4.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.03$",
+        "why": "Both factors come from the original context.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "$0.40$",
+        "why": "This leaves out the probability of the first token.",
+        "correct": false
+      },
+      {
+        "id": "c",
+        "text": "$0.12$",
+        "why": "Multiply 0.3 by the conditional probability 0.4.",
+        "correct": true
+      },
+      {
+        "id": "d",
+        "text": "$0.70$",
+        "why": "Adding the probabilities does not describe both events happening in succession.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "aea-observe.phrase.mc-3",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-observe.phrase"
+    ],
+    "prompt": "A candidate warning becomes twice as likely to start, but its second token becomes one quarter as likely after the first. What is the warning's new probability relative to its old probability?",
+    "reference": "The factor of two times the factor of one quarter is one half.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Twice as high",
+        "why": "Only uses the change in the first factor.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "One quarter as high",
+        "why": "Only uses the change in the second factor.",
+        "correct": false
+      },
+      {
+        "id": "c",
+        "text": "Unchanged",
+        "why": "The changes do not cancel.",
+        "correct": false
+      },
+      {
+        "id": "d",
+        "text": "Half as high",
+        "why": "The factor of two times the factor of one quarter is one half.",
+        "correct": true
+      }
+    ]
+  }
+]

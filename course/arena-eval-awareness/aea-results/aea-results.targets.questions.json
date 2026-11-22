@@ -1,0 +1,59 @@
+[
+  {
+    "id": "aea-results.targets.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-results.targets"
+    ],
+    "prompt": "A phrase ranks prompts better at zero rollouts and worse after six rollouts. Design a fixed position-specific readout for the next dataset that accounts for the crossover.",
+    "reference": "The phrase can fit early reasoning better while another fits later reasoning. Freeze the phrase family or the position-specific selection and aggregation rule. The scoring position changes which prefix conditions the phrase.",
+    "expectations": [
+      "The phrase can fit early reasoning better while another fits later reasoning.",
+      "Freeze the phrase family or the position-specific selection and aggregation rule.",
+      "The scoring position changes which prefix conditions the phrase."
+    ],
+    "misconceptions": [
+      "Selects the highest held-out AUROC after screening phrases."
+    ]
+  },
+  {
+    "id": "aea-results.targets.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-results.targets"
+    ],
+    "prompt": "A team screens 50 phrases on its final benchmark and reports the single highest AUROC. Explain the issue and repair the design.",
+    "reference": "Selecting the apparent winner on the test data favors chance successes. Choose phrases on development data or preregister them, then test on an untouched set. The final score should include uncertainty on new, unused items.",
+    "expectations": [
+      "Selecting the apparent winner on the test data favors chance successes.",
+      "Choose phrases on development data or preregister them, then test on an untouched set.",
+      "The final score should include uncertainty on new, unused items."
+    ],
+    "misconceptions": [
+      "Selects the highest held-out AUROC after screening phrases."
+    ]
+  },
+  {
+    "id": "aea-results.targets.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-results.targets"
+    ],
+    "prompt": "A medical warning monitor should survive paraphrase. Sketch a test with positive, comparison and neutral phrases, and state what instability would indicate.",
+    "reference": "Preselect equivalent warning phrases and relevant neutral or competing controls and evaluate fixed aggregates on held-out cases. Rankings that swing across paraphrases indicate dependence on wording or representation choices. Compare the fixed phrase family against a neutral baseline to expose general language shifts.",
+    "expectations": [
+      "Preselect equivalent warning phrases and relevant neutral or competing controls and evaluate fixed aggregates on held-out cases.",
+      "Rankings that swing across paraphrases indicate dependence on wording or representation choices.",
+      "Compare the fixed phrase family against a neutral baseline to expose general language shifts."
+    ],
+    "misconceptions": [
+      "Selects the highest held-out AUROC after screening phrases."
+    ]
+  }
+]

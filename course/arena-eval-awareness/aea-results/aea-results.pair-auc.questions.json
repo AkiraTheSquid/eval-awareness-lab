@@ -1,0 +1,116 @@
+[
+  {
+    "id": "aea-results.pair-auc.mc-1",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-results.pair-auc"
+    ],
+    "prompt": "Two evaluation items score 0.60 and 0.90. Two deployment items score 0.40 and 0.80. Give the ranking AUROC from all possible evaluation–deployment pairs.",
+    "reference": "Three evaluation–deployment pairs win out of four.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.25$",
+        "why": "This counts losses rather than wins.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "$0.50$",
+        "why": "This misses one of the wins for the higher evaluation score.",
+        "correct": false
+      },
+      {
+        "id": "c",
+        "text": "$0.75$",
+        "why": "Three evaluation–deployment pairs win out of four.",
+        "correct": true
+      },
+      {
+        "id": "d",
+        "text": "$1.00$",
+        "why": "The evaluation item scored 0.60 loses to the deployment item scored 0.80.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "aea-results.pair-auc.mc-2",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-results.pair-auc"
+    ],
+    "prompt": "The only positive item scores 0.50. Three negative items score 0.10, 0.50 and 0.90. Each tie gets half credit. What is the ranking AUROC on these items?",
+    "reference": "One win plus one half-credit tie gives 1.5 points in three pairs.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.50$",
+        "why": "One win plus one half-credit tie gives 1.5 points in three pairs.",
+        "correct": true
+      },
+      {
+        "id": "b",
+        "text": "$0.33$",
+        "why": "This assigns no credit to the tie.",
+        "correct": false
+      },
+      {
+        "id": "c",
+        "text": "$0.67$",
+        "why": "This counts the tie as a full win.",
+        "correct": false
+      },
+      {
+        "id": "d",
+        "text": "$0.75$",
+        "why": "The denominator must include the loss as well as the win and tie.",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "aea-results.pair-auc.mc-3",
+    "kind": "content",
+    "format": "mc",
+    "demand": "apply",
+    "facet": "do",
+    "targets": [
+      "aea-results.pair-auc"
+    ],
+    "prompt": "A review monitor's four positive–negative comparisons yield two wins, one tie and one loss. Next release, every readout value increases by the same offset. What is the new ranking AUROC?",
+    "reference": "Two wins plus half a tie over four pairs gives 0.625 before and after the shift.",
+    "options": [
+      {
+        "id": "a",
+        "text": "$0.50$",
+        "why": "This discards the half-credit tie.",
+        "correct": false
+      },
+      {
+        "id": "b",
+        "text": "$0.75$",
+        "why": "This gives the tie a full point.",
+        "correct": false
+      },
+      {
+        "id": "c",
+        "text": "$0.875$",
+        "why": "A common offset leaves all comparisons unchanged.",
+        "correct": false
+      },
+      {
+        "id": "d",
+        "text": "$0.625$",
+        "why": "Two wins plus half a tie over four pairs gives 0.625 before and after the shift.",
+        "correct": true
+      }
+    ]
+  }
+]

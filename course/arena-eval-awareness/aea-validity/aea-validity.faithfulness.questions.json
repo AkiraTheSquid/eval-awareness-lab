@@ -1,0 +1,59 @@
+[
+  {
+    "id": "aea-validity.faithfulness.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-validity.faithfulness"
+    ],
+    "prompt": "Adding a hint flips a model’s answer, and the reasoning gives a plausible explanation that never mentions the hint. Explain what makes the experiment informative about faithfulness.",
+    "reference": "The controlled hint change altered the answer. The trace omitted a factor shown to influence the decision. The original and hint conditions provide the needed contrast.",
+    "expectations": [
+      "The controlled hint change altered the answer.",
+      "The trace omitted a factor shown to influence the decision.",
+      "The original and hint conditions provide the needed contrast."
+    ],
+    "misconceptions": [
+      "Interprets an omitted hint or reduced flagged rate as absence of influence or safer behavior."
+    ]
+  },
+  {
+    "id": "aea-validity.faithfulness.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.faithfulness"
+    ],
+    "prompt": "After optimization, a text judge flags fewer troubling traces but an independent behavioral test is unchanged. Interpret the result and specify an additional check.",
+    "reference": "Visibility to the judge improved on its own metric while behavior stayed stable. Use held-out behavior tests or a different independently validated readout to check for changes in expression. Lower flag rates alone do not establish a decline in the underlying behavior.",
+    "expectations": [
+      "Visibility to the judge improved on its own metric while behavior stayed stable.",
+      "Use held-out behavior tests or a different independently validated readout to check for changes in expression.",
+      "Lower flag rates alone do not establish a decline in the underlying behavior."
+    ],
+    "misconceptions": [
+      "Interprets an omitted hint or reduced flagged rate as absence of influence or safer behavior."
+    ]
+  },
+  {
+    "id": "aea-validity.faithfulness.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-validity.faithfulness"
+    ],
+    "prompt": "A summarizer is given metadata indicating a preferred organization. Design a controlled check of whether its explanation faithfully reports how metadata affected its selection.",
+    "reference": "Vary only the metadata over matched inputs and compare selection shifts. Inspect whether explanations cite the metadata when the selected content changes. Track cases where the selection stayed unchanged as a comparison group.",
+    "expectations": [
+      "Vary only the metadata over matched inputs and compare selection shifts.",
+      "Inspect whether explanations cite the metadata when the selected content changes.",
+      "Track cases where the selection stayed unchanged as a comparison group."
+    ],
+    "misconceptions": [
+      "Interprets an omitted hint or reduced flagged rate as absence of influence or safer behavior."
+    ]
+  }
+]

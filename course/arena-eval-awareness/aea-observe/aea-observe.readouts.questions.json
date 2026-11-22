@@ -1,0 +1,59 @@
+[
+  {
+    "id": "aea-observe.readouts.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-observe.readouts"
+    ],
+    "prompt": "A team must rank two prompt rewrites before generating text. It can query next-token probabilities and sample responses, but can only access activations after generation. Explain which proposed readout is usable under this budget.",
+    "reference": "A phrase logit monitor scores a named continuation at each initial prefix. Relevant signals that do not raise the selected phrase can be missed. A judge of emitted text would require sampling, whereas a probe would require access to a suitable trained readout and hidden states.",
+    "expectations": [
+      "A phrase logit monitor scores a named continuation at each initial prefix.",
+      "Relevant signals that do not raise the selected phrase can be missed.",
+      "A judge of emitted text would require sampling, whereas a probe would require access to a suitable trained readout and hidden states."
+    ],
+    "misconceptions": [
+      "Treats all readouts as equivalent or decoding as causal use."
+    ]
+  },
+  {
+    "id": "aea-observe.readouts.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-observe.readouts"
+    ],
+    "prompt": "A linear activation probe ranks evaluation-like prompts well while judge flags are rare. Evaluate the claim that high probe accuracy establishes that judged rollouts should also be positive.",
+    "reference": "The hidden state can carry decodable dataset information while explicit language is rare. The data leave open whether the decoded feature causally affects behavior or captures a shortcut. The text judge’s negative results can reflect limited expression or the judge’s sensitivity.",
+    "expectations": [
+      "The hidden state can carry decodable dataset information while explicit language is rare.",
+      "The data leave open whether the decoded feature causally affects behavior or captures a shortcut.",
+      "The text judge’s negative results can reflect limited expression or the judge’s sensitivity."
+    ],
+    "misconceptions": [
+      "Treats all readouts as equivalent or decoding as causal use."
+    ]
+  },
+  {
+    "id": "aea-observe.readouts.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-observe.readouts"
+    ],
+    "prompt": "A hospital transcription model’s text never says it detected a particular accent. You have access to hidden states and approved transcripts. Propose two complementary readouts and say what agreement between them would add.",
+    "reference": "Use an activation readout to decode accent and a probability or text readout to measure linguistic expression. Agreement provides convergent evidence across readouts, while shared confounds and causal use still require controls. Hold speaker and recording quality comparable so both readouts cannot succeed solely on a shared shortcut.",
+    "expectations": [
+      "Use an activation readout to decode accent and a probability or text readout to measure linguistic expression.",
+      "Agreement provides convergent evidence across readouts, while shared confounds and causal use still require controls.",
+      "Hold speaker and recording quality comparable so both readouts cannot succeed solely on a shared shortcut."
+    ],
+    "misconceptions": [
+      "Treats all readouts as equivalent or decoding as causal use."
+    ]
+  }
+]

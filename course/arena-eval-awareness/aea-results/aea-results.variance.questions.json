@@ -1,0 +1,112 @@
+[
+  {
+    "id": "aea-results.variance.direct-1",
+    "kind": "content",
+    "format": "free",
+    "demand": "explain",
+    "targets": [
+      "aea-results.variance"
+    ],
+    "prompt": "A lab reports that peak scores scarcely differ by whether an individual trace flags, but are higher among inputs with any flag across 100 traces. A colleague calls this proof that input wording causes awareness. Explain the strongest defensible interpretation.",
+    "reference": "The prompt grouping captures a stable association with the peak scores. The individual flag is one stochastic draw and may track those scores weakly. Changes in input wording were not isolated by this comparison, so causal attribution requires an intervention.",
+    "expectations": [
+      "The prompt grouping captures a stable association with the peak scores.",
+      "The individual flag is one stochastic draw and may track those scores weakly.",
+      "Changes in input wording were not isolated by this comparison, so causal attribution requires an intervention."
+    ],
+    "misconceptions": [
+      "Treats 24.9% as a causal share or an ever-positive label as ground truth."
+    ]
+  },
+  {
+    "id": "aea-results.variance.direct-2",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-results.variance"
+    ],
+    "prompt": "A prompt produces zero positives in ten samples and one positive over 100 samples. The team interprets the switch as the model becoming more aware. Diagnose that conclusion and say what could remain fixed.",
+    "reference": "The sampled ever-positive label changed with budget. A fixed low per-rollout positive probability can give both observations. The absence of a positive in the first ten samples is weak evidence for absence at larger budgets.",
+    "expectations": [
+      "The sampled ever-positive label changed with budget.",
+      "A fixed low per-rollout positive probability can give both observations.",
+      "The absence of a positive in the first ten samples is weak evidence for absence at larger budgets."
+    ],
+    "misconceptions": [
+      "Treats 24.9% as a causal share or an ever-positive label as ground truth."
+    ]
+  },
+  {
+    "id": "aea-results.variance.transfer-1",
+    "kind": "evaluative",
+    "format": "free",
+    "demand": "evaluate",
+    "targets": [
+      "aea-results.variance"
+    ],
+    "prompt": "A hint monitor assigns scores near 0.25 to three sampled answers to Problem A and near 0.02 to sampled answers to Problem B. Only one answer to A mentions the hint. Which comparison would show whether flag status tracks the score within A?",
+    "reference": "Compare the one A response mentioning the hint to the other A responses. The listed scores imply similar peaks within A despite the different flags. The large gap across problems is a separate between-problem comparison.",
+    "expectations": [
+      "Compare flagged and unflagged responses within A.",
+      "Scores within A are similar despite different verbalization outcomes.",
+      "The gap between A and B is a separate comparison across prompts."
+    ],
+    "misconceptions": [
+      "Treats 24.9% as a causal share or an ever-positive label as ground truth."
+    ]
+  },
+  {
+    "id": "aea-mixed.repeated-sampling",
+    "kind": "content",
+    "format": "staged",
+    "demand": "apply",
+    "targets": [
+      "aea-results.variance"
+    ],
+    "prompt": "A prompt independently has a one-in-four chance of a positive verbalization flag on each sampled trace. A second group of prompts is scored under the same judging conditions.",
+    "reference": "Calculate the chance that both samples miss and subtract from one. $$1-(0.75)^2=0.4375$$ No change to per-draw propensity is required. The ever-positive label summarizes several independent chances to see a flag, so more draws can convert an observed negative label to a positive one even while the underlying prompt stays fixed.",
+    "parts": [
+      {
+        "concept": "aea-results.any-flag",
+        "facet": "do",
+        "kind": "mc",
+        "text": "With two samples from the first prompt, what is the chance of observing at least one flag?",
+        "solution": "Calculate the chance that both samples miss and subtract from one. $$1-(0.75)^2=0.4375$$",
+        "options": [
+          {
+            "id": "a",
+            "text": "$0.0625$",
+            "why": "This is the chance both samples are positive.",
+            "correct": false
+          },
+          {
+            "id": "b",
+            "text": "$0.50$",
+            "why": "Adding the positive probabilities double counts two positives.",
+            "correct": false
+          },
+          {
+            "id": "c",
+            "text": "$0.5625$",
+            "why": "This is the chance both samples miss.",
+            "correct": false
+          },
+          {
+            "id": "d",
+            "text": "$0.4375$",
+            "why": "This is the complement of two misses.",
+            "correct": true
+          }
+        ]
+      },
+      {
+        "concept": "aea-results.variance",
+        "facet": "explain",
+        "kind": "free",
+        "text": "A team doubles the number of samples from every prompt. More prompts receive an ever-positive label. Explain whether this requires the original prompts to become more likely to verbalize on each draw.",
+        "solution": "No change to per-draw propensity is required. The ever-positive label summarizes several independent chances to see a flag, so more draws can convert an observed negative label to a positive one even while the underlying prompt stays fixed."
+      }
+    ]
+  }
+]

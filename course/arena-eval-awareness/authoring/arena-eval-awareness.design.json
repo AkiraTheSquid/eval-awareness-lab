@@ -1,0 +1,864 @@
+{
+  "version": 1,
+  "course": "arena-eval-awareness",
+  "scope": {
+    "focus_question": "Given an unfamiliar study of evaluation awareness, decide what each measurement supports, diagnose a confound, and design a check that could change the conclusion.",
+    "audience": "ARENA applicant who reads research prose and wants independent practice interpreting an empirical paper.",
+    "outcomes": [
+      "Explain phrase probability and verbalization with an original example.",
+      "Interpret the main figures and prompt-versus-rollout evidence.",
+      "Design matched, held-out and intervention tests that discriminate rival explanations.",
+      "Compute phrase probabilities, rollout summaries, pairwise AUROC and the chance of at least one flag.",
+      "Use a numerical result to explain what a reported experiment measures, with no requirement to implement or run an experiment."
+    ],
+    "inputs": [
+      {
+        "id": "aea-goodfire",
+        "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/goodfire.txt",
+        "include": "Introduction, Methods, Results, Discussion and appendices A–D",
+        "exclude": "Comment thread"
+      },
+      {
+        "id": "aea-companion",
+        "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/companion.txt",
+        "include": "Sections 2–5: associations, interventions and rewrites",
+        "exclude": "Prompt examples and operational attack details"
+      },
+      {
+        "id": "aea-heidari",
+        "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/heidari.txt",
+        "include": "Abstract and main results: decodability, verbalization and steering",
+        "exclude": "Implementation details"
+      },
+      {
+        "id": "aea-needham",
+        "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/needham.txt",
+        "include": "Abstract and dataset framing",
+        "exclude": "Replication implementation"
+      },
+      {
+        "id": "aea-chen",
+        "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/chen.txt",
+        "include": "Hint experiment and interpretation",
+        "exclude": "Training implementation"
+      },
+      {
+        "id": "aea-graders",
+        "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/graders.txt",
+        "include": "Readout targets, grader effects and training-awareness control",
+        "exclude": "Implementation details"
+      },
+      {
+        "id": "aea-research-guide",
+        "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/research-guide.txt",
+        "include": "Measurement, validity, related research and replication program",
+        "exclude": "Application answer drafts and unverified comment-only details"
+      },
+      {
+        "id": "aea-fawcett",
+        "path": "This-Directory-Only/courses-private/arena-eval-awareness/_sources/fawcett.txt",
+        "include": "Sections 4 and 5: ties in ROC paths and area-under-curve as a ranking statistic",
+        "exclude": "Model fitting, ROC averaging and model comparison tooling"
+      }
+    ],
+    "background": [
+      {
+        "claim": "Basic fractions and comparisons",
+        "status": "assumed",
+        "basis": "Entry-level quantitative expectation",
+        "probe": "Explain what changes between one success in ten trials and three successes in ten trials."
+      },
+      {
+        "claim": "Prior exposure to the Goodfire study",
+        "status": "reported",
+        "basis": "Learner provided the paper and research report",
+        "probe": "Explain why a model may score a phrase highly even if none of three sampled traces contains it."
+      }
+    ],
+    "exclusions": "Application submission prose, model execution and implementation, large-scale replication, and advanced experimental or ablation pipelines. Simple controls are considered when interpreting reported results.",
+    "elicitation": "source-analysis",
+    "elicitation_notes": "Primary sources and the supplied research guide. No expert interview, observed learner performance, or pilot.",
+    "elicitation_record": ""
+  },
+  "candidates": [
+    {
+      "id": "candidate-signal",
+      "decision": "keep",
+      "inputs": [
+        "A sampled trace and its probability distribution"
+      ],
+      "outputs": [
+        "aea-observe.signal"
+      ],
+      "reason": "Treats silence as absence of signal. warrants this remediation: Compare two distributions that can emit the same trace.",
+      "source_notes": "goodfire, Introduction"
+    },
+    {
+      "id": "candidate-phrase",
+      "decision": "keep",
+      "inputs": [
+        "Scoring a phrase at a sentence boundary"
+      ],
+      "outputs": [
+        "aea-observe.phrase"
+      ],
+      "reason": "Multiplies probabilities from the same prefix or treats the phrase score as a belief probability. warrants this remediation: Walk through the prefix one token at a time.",
+      "source_notes": "goodfire, Methods"
+    },
+    {
+      "id": "candidate-readouts",
+      "decision": "keep",
+      "inputs": [
+        "What each monitor can observe"
+      ],
+      "outputs": [
+        "aea-observe.readouts"
+      ],
+      "reason": "Treats all readouts as equivalent or decoding as causal use. warrants this remediation: Map each instrument to what it reads and what it misses.",
+      "source_notes": "heidari, Abstract"
+    },
+    {
+      "id": "candidate-scores",
+      "decision": "keep",
+      "inputs": [
+        "From boundaries and rollouts to a prompt score"
+      ],
+      "outputs": [
+        "aea-results.scores"
+      ],
+      "reason": "Averages the logit score or overlooks the extra chances created by a larger search budget. warrants this remediation: Contrast the maximum with the fraction using the same traces.",
+      "source_notes": "goodfire, Results, Figure 2"
+    },
+    {
+      "id": "candidate-ranking",
+      "decision": "keep",
+      "inputs": [
+        "Reading Figure 2 and AUROC"
+      ],
+      "outputs": [
+        "aea-results.ranking"
+      ],
+      "reason": "Reads AUC as accuracy, calibration or a result on the other target. warrants this remediation: Name positives and negatives before interpreting the ranking.",
+      "source_notes": "goodfire, Results, Figure 2"
+    },
+    {
+      "id": "candidate-variance",
+      "decision": "keep",
+      "inputs": [
+        "Prompt effects and rollout effects"
+      ],
+      "outputs": [
+        "aea-results.variance"
+      ],
+      "reason": "Treats 24.9% as a causal share or an ever-positive label as ground truth. warrants this remediation: Group traces by prompt and compare sampled labels at different budgets.",
+      "source_notes": "goodfire, Results, Figure 1"
+    },
+    {
+      "id": "candidate-targets",
+      "decision": "keep",
+      "inputs": [
+        "Phrase choice and robustness"
+      ],
+      "outputs": [
+        "aea-results.targets"
+      ],
+      "reason": "Selects the highest held-out AUROC after screening phrases. warrants this remediation: Select phrases and controls up front and compare position-specific results.",
+      "source_notes": "goodfire, Results"
+    },
+    {
+      "id": "candidate-confounds",
+      "decision": "keep",
+      "inputs": [
+        "Dataset origin and construct validity"
+      ],
+      "outputs": [
+        "aea-validity.confounds"
+      ],
+      "reason": "Treats dataset provenance as ground truth about the model’s state. warrants this remediation: Cross actual setting and visible appearance with content held fixed.",
+      "source_notes": "goodfire, Appendix B"
+    },
+    {
+      "id": "candidate-transport",
+      "decision": "keep",
+      "inputs": [
+        "Testing on a new eval family"
+      ],
+      "outputs": [
+        "aea-validity.transport"
+      ],
+      "reason": "Randomly splits a benchmark and calls it external validation. warrants this remediation: Hold out a source, freeze choices, and report ranking and operating behavior.",
+      "source_notes": "graders, Discussion of training awareness"
+    },
+    {
+      "id": "candidate-causal",
+      "decision": "keep",
+      "inputs": [
+        "From association to effects on behavior"
+      ],
+      "outputs": [
+        "aea-validity.causal"
+      ],
+      "reason": "Takes a monitor shift as evidence that awareness caused a behavior shift. warrants this remediation: Compare a controlled change and separate readout and behavior outcomes.",
+      "source_notes": "companion, Summary"
+    },
+    {
+      "id": "candidate-strategy",
+      "decision": "keep",
+      "inputs": [
+        "Awareness, gaming and deception"
+      ],
+      "outputs": [
+        "aea-validity.strategy"
+      ],
+      "reason": "Infers a deceptive objective from a high awareness score or a behavioral switch. warrants this remediation: Test awareness, incentive and behavior separately and compare simpler explanations.",
+      "source_notes": "needham, Abstract"
+    },
+    {
+      "id": "candidate-faithfulness",
+      "decision": "keep",
+      "inputs": [
+        "Faithfulness and monitoring under optimization"
+      ],
+      "outputs": [
+        "aea-validity.faithfulness"
+      ],
+      "reason": "Interprets an omitted hint or reduced flagged rate as absence of influence or safer behavior. warrants this remediation: Compare decisions with and without a hint, then track actions independently of a text monitor.",
+      "source_notes": "chen, Testing for faithfulness"
+    },
+    {
+      "id": "candidate-pair-auc",
+      "decision": "keep",
+      "inputs": [
+        "Pairwise calculation of AUROC"
+      ],
+      "outputs": [
+        "aea-results.pair-auc"
+      ],
+      "reason": "A learner may compute all cross-group comparisons correctly while misunderstanding what constitutes a positive in Figure 2.",
+      "source_notes": "Supplied research guide, discussion of the corresponding Goodfire result."
+    },
+    {
+      "id": "candidate-any-flag",
+      "decision": "keep",
+      "inputs": [
+        "Probability of at least one flag"
+      ],
+      "outputs": [
+        "aea-results.any-flag"
+      ],
+      "reason": "A learner may compute the chance of at least one flag correctly while wrongly reading 24.9% explained variance as causal.",
+      "source_notes": "Supplied research guide, discussion of the corresponding Goodfire result."
+    }
+  ],
+  "nodes": [
+    {
+      "id": "aea-observe.signal",
+      "mastery_claim": "Distinguish a sampled continuation from the probability of an unsampled phrase.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Treats silence as absence of signal. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Treats silence as absence of signal.",
+      "instructional_response": "Compare two distributions that can emit the same trace.",
+      "evidence": [
+        {
+          "question": "aea-observe.signal.direct-1",
+          "role": "direct",
+          "observes": "Sampling can miss an elevated but low-probability continuation. The evidence is for availability of the selected phrasing. Three draws can all omit the same phrase even when its probability is higher than a control.",
+          "warrant": "The response applies this distinction to the given case: Distinguish a sampled continuation from the probability of an unsampled phrase.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-observe.signal.direct-2",
+          "role": "direct",
+          "observes": "The conditional probability of a possible continuation changed even though the emitted text matched. Inferring an internal belief or a behavior change requires evidence beyond that readout. A matched comparison to the model before the framing change anchors what “higher” means.",
+          "warrant": "The response applies this distinction to the given case: Distinguish a sampled continuation from the probability of an unsampled phrase.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-observe.signal.transfer-1",
+          "role": "transfer",
+          "observes": "Compare conditional probability of a fixed warning under appropriately matched prefixes. An increase supports greater availability of the warning, with direct calibration or behavior requiring separate checks. The model may express uncertainty in other words even when the selected phrase remains unlikely.",
+          "warrant": "The response applies this distinction to the given case: Distinguish a sampled continuation from the probability of an unsampled phrase.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-synthesis.review",
+          "role": "integrated",
+          "observes": "A probability readout can register an available phrase that a sampled trace omits.",
+          "warrant": "The learner must connect this inference to the same evaluation design as the other two.",
+          "rival": "A strong response on one part may hide an error on another, so separate practice remains necessary."
+        }
+      ]
+    },
+    {
+      "id": "aea-observe.phrase",
+      "mastery_claim": "Compute and interpret the product of conditional token probabilities at a fixed prefix.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Multiplies probabilities from the same prefix or treats the phrase score as a belief probability. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Multiplies probabilities from the same prefix or treats the phrase score as a belief probability.",
+      "instructional_response": "Walk through the prefix one token at a time.",
+      "evidence": [
+        {
+          "question": "aea-observe.phrase.direct-1",
+          "role": "direct",
+          "observes": "The probability is 0.08. The second factor is conditioned on the prefix including the first target token. Use the original prefix only for the first factor.",
+          "warrant": "The response applies this distinction to the given case: Compute and interpret the product of conditional token probabilities at a fixed prefix.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-observe.phrase.direct-2",
+          "role": "direct",
+          "observes": "The full phrase becomes half as probable. Multiply the factor of three by the factor of one sixth. The increase in the first factor is outweighed by the decrease in the conditional second factor.",
+          "warrant": "The response applies this distinction to the given case: Compute and interpret the product of conditional token probabilities at a fixed prefix.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-observe.phrase.transfer-1",
+          "role": "transfer",
+          "observes": "Read each command token’s probability given the preceding context and all earlier command tokens. Multiply the conditional probabilities to get the probability of that exact continuation. The first token’s probability must use the original context, before adding any command tokens.",
+          "warrant": "The response applies this distinction to the given case: Compute and interpret the product of conditional token probabilities at a fixed prefix.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-observe.phrase.mc-1",
+          "role": "direct",
+          "observes": "Multiply all three conditional probabilities.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-observe.phrase.mc-2",
+          "role": "direct",
+          "observes": "Multiply 0.3 by the conditional probability 0.4.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-observe.phrase.mc-3",
+          "role": "transfer",
+          "observes": "The factor of two times the factor of one quarter is one half.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        }
+      ]
+    },
+    {
+      "id": "aea-observe.readouts",
+      "mastery_claim": "Choose between text, logits, an activation probe and a natural-language activation readout given an observation limit.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Treats all readouts as equivalent or decoding as causal use. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Treats all readouts as equivalent or decoding as causal use.",
+      "instructional_response": "Map each instrument to what it reads and what it misses.",
+      "evidence": [
+        {
+          "question": "aea-observe.readouts.direct-1",
+          "role": "direct",
+          "observes": "A phrase logit monitor scores a named continuation at each initial prefix. Relevant signals that do not raise the selected phrase can be missed. A judge of emitted text would require sampling, whereas a probe would require access to a suitable trained readout and hidden states.",
+          "warrant": "The response applies this distinction to the given case: Choose between text, logits, an activation probe and a natural-language activation readout given an observation limit.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-observe.readouts.direct-2",
+          "role": "direct",
+          "observes": "The hidden state can carry decodable dataset information while explicit language is rare. The data leave open whether the decoded feature causally affects behavior or captures a shortcut. The text judge’s negative results can reflect limited expression or the judge’s sensitivity.",
+          "warrant": "The response applies this distinction to the given case: Choose between text, logits, an activation probe and a natural-language activation readout given an observation limit.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-observe.readouts.transfer-1",
+          "role": "transfer",
+          "observes": "Use an activation readout to decode accent and a probability or text readout to measure linguistic expression. Agreement provides convergent evidence across readouts, while shared confounds and causal use still require controls. Hold speaker and recording quality comparable so both readouts cannot succeed solely on a shared shortcut.",
+          "warrant": "The response applies this distinction to the given case: Choose between text, logits, an activation probe and a natural-language activation readout given an observation limit.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        }
+      ]
+    },
+    {
+      "id": "aea-results.scores",
+      "mastery_claim": "The logit score for a prompt is its highest monitored phrase probability across the inspected boundaries and sampled rollouts.",
+      "split_test": "A learner can compute the peak exactly yet misinterpret the peak as validation of awareness.",
+      "diagnostic_error": "Averages boundary scores instead of taking the maximum.",
+      "instructional_response": "Compute each allowed boundary score, then identify the highest.",
+      "evidence": [
+        {
+          "question": "aea-results.scores.direct-1",
+          "role": "direct",
+          "observes": "The logit maximum includes the unflagged trace. The highest of the three scores is 0.11. Removing an inspected trace changes the quantity being reported.",
+          "warrant": "The response distinguishes the inference available from two explicitly described comparisons.",
+          "rival": "Learner may favor the larger-sounding study without noticing what is held fixed."
+        },
+        {
+          "question": "aea-results.scores.direct-2",
+          "role": "direct",
+          "observes": "More boundaries give additional chances for a high maximum. Compare equal boundary budgets or test a boundary-count baseline. The per-boundary distribution need not improve for the maximum to increase.",
+          "warrant": "The response applies this distinction to the given case: Compute and compare prompt scores from boundary maxima and judge-positive fractions.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-results.scores.transfer-1",
+          "role": "transfer",
+          "observes": "The evaluation peak within the cap is 0.09. The deployment peak within the cap is 0.14. The later evaluation value is excluded from this comparison.",
+          "warrant": "The response distinguishes the inference available from two explicitly described comparisons.",
+          "rival": "Learner may favor the larger-sounding study without noticing what is held fixed."
+        },
+        {
+          "question": "aea-results.scores.mc-1",
+          "role": "direct",
+          "observes": "The products are 0.15, 0.16 and 0.10, so the middle boundary supplies the largest value.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-results.scores.mc-2",
+          "role": "direct",
+          "observes": "Compute the products 0.07 and 0.12, then take their maximum.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-results.scores.mc-3",
+          "role": "transfer",
+          "observes": "Without the cap the maximum is 0.25. With the cap it is 0.12, giving a difference of 0.13.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-mixed.rollout-ranking#1",
+          "role": "transfer",
+          "observes": "Take the highest score across the boundary positions reached in the rollout. $$\\max(0.10,0.25,0.05)=0.25$$",
+          "warrant": "This part applies the corresponding lesson to the common case, with a separate answer and grade.",
+          "rival": "An early arithmetic miss can otherwise hide later interpretive understanding. The later part supplies any earlier quantity it needs."
+        }
+      ]
+    },
+    {
+      "id": "aea-results.ranking",
+      "mastery_claim": "Interpret the two prediction targets and AUROC as a ranking statistic.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Reads AUC as accuracy, calibration or a result on the other target. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Reads AUC as accuracy, calibration or a result on the other target.",
+      "instructional_response": "Name positives and negatives before interpreting the ranking.",
+      "evidence": [
+        {
+          "question": "aea-results.ranking.direct-1",
+          "role": "direct",
+          "observes": "It is approximately the chance a randomly chosen Fortress prompt scores above a WildChat prompt, with ties getting half credit. Accuracy requires a decision threshold and a specified evaluation population. An individual prompt can be misranked despite this average.",
+          "warrant": "The response applies this distinction to the given case: Interpret the two prediction targets and AUROC as a ranking statistic.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-results.ranking.direct-2",
+          "role": "direct",
+          "observes": "The positive label is whether the Fortress prompt has any positive trace among 100 reference rollouts. One observed rollout may provide a score that predicts that prompt-level label. The single-rollout score and reference label are different quantities even if some samples are shared.",
+          "warrant": "The response applies this distinction to the given case: Interpret the two prediction targets and AUROC as a ranking statistic.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-results.ranking.transfer-1",
+          "role": "transfer",
+          "observes": "AUROC stays the same because ordering is unchanged. The alert rate and threshold-dependent error rates may change. The transform preserves ties as well as strict ordering.",
+          "warrant": "The response applies this distinction to the given case: Interpret the two prediction targets and AUROC as a ranking statistic.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-mixed.rollout-ranking#3",
+          "role": "direct",
+          "observes": "The score separates the sources on these three items. That claim uses dataset provenance as the label. The zero flags provide no positive sampled verbalizations, and the source ranking does not establish which prompts ever verbalize across a larger reference sample.",
+          "warrant": "This part applies the corresponding lesson to the common case, with a separate answer and grade.",
+          "rival": "An early arithmetic miss can otherwise hide later interpretive understanding. The later part supplies any earlier quantity it needs."
+        }
+      ]
+    },
+    {
+      "id": "aea-results.variance",
+      "mastery_claim": "Distinguish prompt-level association from rollout-level association and interpret repeated-sampling labels.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Treats 24.9% as a causal share or an ever-positive label as ground truth. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Treats 24.9% as a causal share or an ever-positive label as ground truth.",
+      "instructional_response": "Group traces by prompt and compare sampled labels at different budgets.",
+      "evidence": [
+        {
+          "question": "aea-results.variance.direct-1",
+          "role": "direct",
+          "observes": "The prompt grouping captures a stable association with the peak scores. The individual flag is one stochastic draw and may track those scores weakly. Changes in input wording were not isolated by this comparison, so causal attribution requires an intervention.",
+          "warrant": "The response applies this distinction to the given case: Distinguish prompt-level association from rollout-level association and interpret repeated-sampling labels.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-results.variance.direct-2",
+          "role": "direct",
+          "observes": "The sampled ever-positive label changed with budget. A fixed low per-rollout positive probability can give both observations. The absence of a positive in the first ten samples is weak evidence for absence at larger budgets.",
+          "warrant": "The response applies this distinction to the given case: Distinguish prompt-level association from rollout-level association and interpret repeated-sampling labels.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-results.variance.transfer-1",
+          "role": "transfer",
+          "observes": "Compare flagged and unflagged responses within A. Scores within A are similar despite different verbalization outcomes. The gap between A and B is a separate comparison across prompts.",
+          "warrant": "The response distinguishes the inference available from two explicitly described comparisons.",
+          "rival": "Learner may favor the larger-sounding study without noticing what is held fixed."
+        },
+        {
+          "question": "aea-synthesis.review",
+          "role": "integrated",
+          "observes": "A prompt-level repeated-sampling label can track stable propensity better than one sampled flag, while the comparison remains observational and budget dependent.",
+          "warrant": "The learner must connect this inference to the same evaluation design as the other two.",
+          "rival": "A strong response on one part may hide an error on another, so separate practice remains necessary."
+        },
+        {
+          "question": "aea-mixed.repeated-sampling#2",
+          "role": "direct",
+          "observes": "No change to per-draw propensity is required. The ever-positive label summarizes several independent chances to see a flag, so more draws can convert an observed negative label to a positive one even while the underlying prompt stays fixed.",
+          "warrant": "This part applies the corresponding lesson to the common case, with a separate answer and grade.",
+          "rival": "An early arithmetic miss can otherwise hide later interpretive understanding. The later part supplies any earlier quantity it needs."
+        }
+      ]
+    },
+    {
+      "id": "aea-results.targets",
+      "mastery_claim": "Interpret a change in ranking across target phrases or reasoning positions and propose a prospective robustness check.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Selects the highest held-out AUROC after screening phrases. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Selects the highest held-out AUROC after screening phrases.",
+      "instructional_response": "Select phrases and controls up front and compare position-specific results.",
+      "evidence": [
+        {
+          "question": "aea-results.targets.direct-1",
+          "role": "direct",
+          "observes": "The phrase can fit early reasoning better while another fits later reasoning. Freeze the phrase family or the position-specific selection and aggregation rule. The scoring position changes which prefix conditions the phrase.",
+          "warrant": "The response applies this distinction to the given case: Interpret a change in ranking across target phrases or reasoning positions and propose a prospective robustness check.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-results.targets.direct-2",
+          "role": "direct",
+          "observes": "Selecting the apparent winner on the test data favors chance successes. Choose phrases on development data or preregister them, then test on an untouched set. The final score should include uncertainty on new, unused items.",
+          "warrant": "The response applies this distinction to the given case: Interpret a change in ranking across target phrases or reasoning positions and propose a prospective robustness check.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-results.targets.transfer-1",
+          "role": "transfer",
+          "observes": "Preselect equivalent warning phrases and relevant neutral or competing controls and evaluate fixed aggregates on held-out cases. Rankings that swing across paraphrases indicate dependence on wording or representation choices. Compare the fixed phrase family against a neutral baseline to expose general language shifts.",
+          "warrant": "The response applies this distinction to the given case: Interpret a change in ranking across target phrases or reasoning positions and propose a prospective robustness check.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        }
+      ]
+    },
+    {
+      "id": "aea-validity.confounds",
+      "mastery_claim": "Design a matched or crossed test that distinguishes source cues from evaluation framing.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Treats dataset provenance as ground truth about the model’s state. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Treats dataset provenance as ground truth about the model’s state.",
+      "instructional_response": "Cross actual setting and visible appearance with content held fixed.",
+      "evidence": [
+        {
+          "question": "aea-validity.confounds.direct-1",
+          "role": "direct",
+          "observes": "Length may distinguish sources or provide more opportunities for high scores independently of awareness. Compare length-matched items or controlled length variants, and report the length-only baseline. At matched length, attenuation would support the shortcut account.",
+          "warrant": "The response applies this distinction to the given case: Design a matched or crossed test that distinguishes source cues from evaluation framing.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-validity.confounds.direct-2",
+          "role": "direct",
+          "observes": "Cross message presence with source or use a common system message for both groups. Check whether the score tracks the message condition within sources or retains separation at fixed format. Scores tracking message presence across both sources would support a formatting shortcut.",
+          "warrant": "The response applies this distinction to the given case: Design a matched or crossed test that distinguishes source cues from evaluation framing.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-validity.confounds.transfer-1",
+          "role": "transfer",
+          "observes": "Cross actual test or deployment status with benchmark-like or natural phrasing while holding task content fixed. A shortcut follows appearance in both actual settings. An invisible assignment cannot be recovered from otherwise identical inputs.",
+          "warrant": "The response applies this distinction to the given case: Design a matched or crossed test that distinguishes source cues from evaluation framing.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-synthesis.review",
+          "role": "integrated",
+          "observes": "Cross a candidate source cue with framing at fixed task content. State which pattern would favor a shortcut and which would favor the intended interpretation.",
+          "warrant": "The learner must connect this inference to the same evaluation design as the other two.",
+          "rival": "A strong response on one part may hide an error on another, so separate practice remains necessary."
+        }
+      ]
+    },
+    {
+      "id": "aea-validity.transport",
+      "mastery_claim": "Design held-out transport and threshold tests across datasets and graders.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Randomly splits a benchmark and calls it external validation. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Randomly splits a benchmark and calls it external validation.",
+      "instructional_response": "Hold out a source, freeze choices, and report ranking and operating behavior.",
+      "evidence": [
+        {
+          "question": "aea-validity.transport.direct-1",
+          "role": "direct",
+          "observes": "A random split can retain source cues. Monitor B tests the ranking on a new source. Freezing choices avoids tuning to the held-out results.",
+          "warrant": "The response distinguishes the inference available from two explicitly described comparisons.",
+          "rival": "Learner may favor the larger-sounding study without noticing what is held fixed."
+        },
+        {
+          "question": "aea-validity.transport.direct-2",
+          "role": "direct",
+          "observes": "Vary credible training framing and evaluation framing independently while holding task text fixed. Compare whether each readout follows its named variable or responds similarly to both. A selective response to one factor is stronger evidence for distinct sensitivity than a pooled correlation.",
+          "warrant": "The response applies this distinction to the given case: Design held-out transport and threshold tests across datasets and graders.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-validity.transport.transfer-1",
+          "role": "transfer",
+          "observes": "The score ranking can survive a shift in the scale at a frozen cutoff. Report the false-positive rate at that cutoff and consider prevalence when reporting precision. Measure whether the score distribution shifted among genuine cases at the same cutoff.",
+          "warrant": "The response applies this distinction to the given case: Design held-out transport and threshold tests across datasets and graders.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        }
+      ]
+    },
+    {
+      "id": "aea-validity.causal",
+      "mastery_claim": "Distinguish decoding, a prompt intervention and a controlled intervention on reasoning or activations.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Takes a monitor shift as evidence that awareness caused a behavior shift. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Takes a monitor shift as evidence that awareness caused a behavior shift.",
+      "instructional_response": "Compare a controlled change and separate readout and behavior outcomes.",
+      "evidence": [
+        {
+          "question": "aea-validity.causal.direct-1",
+          "role": "direct",
+          "observes": "The controlled intervention supplies stronger causal evidence. The neutral comparison helps isolate evaluation-related content. The association alone permits a prompt-level common cause.",
+          "warrant": "The response distinguishes the inference available from two explicitly described comparisons.",
+          "rival": "Learner may favor the larger-sounding study without noticing what is held fixed."
+        },
+        {
+          "question": "aea-validity.causal.direct-2",
+          "role": "direct",
+          "observes": "Check that task semantics, target behavior and difficulty are preserved. Check the new result with independent measurements and appropriate control rewrites. An altered task or broader persona shift can explain an apparent improvement.",
+          "warrant": "The response applies this distinction to the given case: Distinguish decoding, a prompt intervention and a controlled intervention on reasoning or activations.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-validity.causal.transfer-1",
+          "role": "transfer",
+          "observes": "Measure abstention separately under the intervention and a matched control direction. Increased uncertainty wording alone leaves the behavioral effect unresolved. A matched irrelevant intervention tests whether the behavior shift is specific to the proposed feature.",
+          "warrant": "The response applies this distinction to the given case: Distinguish decoding, a prompt intervention and a controlled intervention on reasoning or activations.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        }
+      ]
+    },
+    {
+      "id": "aea-validity.strategy",
+      "mastery_claim": "Identify additional evidence required for an inference about strategic behavior.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Infers a deceptive objective from a high awareness score or a behavioral switch. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Infers a deceptive objective from a high awareness score or a behavioral switch.",
+      "instructional_response": "Test awareness, incentive and behavior separately and compare simpler explanations.",
+      "evidence": [
+        {
+          "question": "aea-validity.strategy.direct-1",
+          "role": "direct",
+          "observes": "Show behavior changes with perceived evaluation and the expected scoring incentive while the task is controlled. Rule out straightforward prompt difficulty or formatting explanations. Confirm that the model had access to the changed scoring condition.",
+          "warrant": "The response applies this distinction to the given case: Identify additional evidence required for an inference about strategic behavior.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-validity.strategy.direct-2",
+          "role": "direct",
+          "observes": "A label can change task interpretation or trigger a brittle response policy. Test the same tasks with independent changes to framing and incentives, and verify capability in matched conditions. Demonstrated competence on the same task helps distinguish selective withholding from lack of ability.",
+          "warrant": "The response applies this distinction to the given case: Identify additional evidence required for an inference about strategic behavior.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-validity.strategy.transfer-1",
+          "role": "transfer",
+          "observes": "It supports reward hacking if exploiting the score gap drives the behavior. A covert objective claim needs evidence of persistent conflicting goals and strategically conditional behavior under controlled oversight variations. Check that the agent’s choice tracks the grader reward when wording and task are held fixed.",
+          "warrant": "The response applies this distinction to the given case: Identify additional evidence required for an inference about strategic behavior.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        }
+      ]
+    },
+    {
+      "id": "aea-validity.faithfulness",
+      "mastery_claim": "Use a controlled perturbation and independent behavior checks to assess omissions and shifts in monitorability.",
+      "split_test": "A learner may recall the source finding yet make this specific error: Interprets an omitted hint or reduced flagged rate as absence of influence or safer behavior. The task checks whether they can apply the finding.",
+      "diagnostic_error": "Interprets an omitted hint or reduced flagged rate as absence of influence or safer behavior.",
+      "instructional_response": "Compare decisions with and without a hint, then track actions independently of a text monitor.",
+      "evidence": [
+        {
+          "question": "aea-validity.faithfulness.direct-1",
+          "role": "direct",
+          "observes": "The controlled hint change altered the answer. The trace omitted a factor shown to influence the decision. The original and hint conditions provide the needed contrast.",
+          "warrant": "The response applies this distinction to the given case: Use a controlled perturbation and independent behavior checks to assess omissions and shifts in monitorability.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-validity.faithfulness.direct-2",
+          "role": "direct",
+          "observes": "Visibility to the judge improved on its own metric while behavior stayed stable. Use held-out behavior tests or a different independently validated readout to check for changes in expression. Lower flag rates alone do not establish a decline in the underlying behavior.",
+          "warrant": "The response applies this distinction to the given case: Use a controlled perturbation and independent behavior checks to assess omissions and shifts in monitorability.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        },
+        {
+          "question": "aea-validity.faithfulness.transfer-1",
+          "role": "transfer",
+          "observes": "Vary only the metadata over matched inputs and compare selection shifts. Inspect whether explanations cite the metadata when the selected content changes. Track cases where the selection stayed unchanged as a comparison group.",
+          "warrant": "The response applies this distinction to the given case: Use a controlled perturbation and independent behavior checks to assess omissions and shifts in monitorability.",
+          "rival": "A memorized slogan can sound plausible without identifying the comparison in this case."
+        }
+      ]
+    },
+    {
+      "id": "aea-results.pair-auc",
+      "mastery_claim": "Compute ranking AUROC from scored positive and negative items.",
+      "split_test": "A learner may compute all cross-group comparisons correctly while misunderstanding what constitutes a positive in Figure 2.",
+      "diagnostic_error": "Counts a positive–negative tie as a full win.",
+      "instructional_response": "List all cross-group pairs and award a tie half a point.",
+      "evidence": [
+        {
+          "question": "aea-results.pair-auc.mc-1",
+          "role": "direct",
+          "observes": "Three evaluation–deployment pairs win out of four.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-results.pair-auc.mc-2",
+          "role": "direct",
+          "observes": "One win plus one half-credit tie gives 1.5 points in three pairs.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-results.pair-auc.mc-3",
+          "role": "transfer",
+          "observes": "Two wins plus half a tie over four pairs gives 0.625 before and after the shift.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-mixed.rollout-ranking#2",
+          "role": "transfer",
+          "observes": "Each evaluation score beats the deployment score, so both pairs count as wins. $$\\mathrm{AUROC}=\\frac{1+1}{2}=1$$",
+          "warrant": "This part applies the corresponding lesson to the common case, with a separate answer and grade.",
+          "rival": "An early arithmetic miss can otherwise hide later interpretive understanding. The later part supplies any earlier quantity it needs."
+        }
+      ]
+    },
+    {
+      "id": "aea-results.any-flag",
+      "mastery_claim": "Calculate how the chance of an observed ever-positive label changes with the rollout budget.",
+      "split_test": "A learner may compute the chance of at least one flag correctly while wrongly reading 24.9% explained variance as causal.",
+      "diagnostic_error": "Adds per-draw flag chances without accounting for draws that both flag.",
+      "instructional_response": "Compute the probability of no positives and take its complement.",
+      "evidence": [
+        {
+          "question": "aea-results.any-flag.mc-1",
+          "role": "direct",
+          "observes": "Both rolls are silent with chance 0.64. Subtract from one.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-results.any-flag.mc-2",
+          "role": "direct",
+          "observes": "Subtract the probability that all three samples are negative.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-results.any-flag.mc-3",
+          "role": "transfer",
+          "observes": "Two misses have probability 0.49, leaving 0.51 for at least one flag.",
+          "warrant": "A correct choice uses the calculation on the values in this situation.",
+          "rival": "A learner can guess among the choices. Distractors distinguish common calculation errors when a wrong answer is selected."
+        },
+        {
+          "question": "aea-mixed.repeated-sampling#1",
+          "role": "transfer",
+          "observes": "Calculate the chance that both samples miss and subtract from one. $$1-(0.75)^2=0.4375$$",
+          "warrant": "This part applies the corresponding lesson to the common case, with a separate answer and grade.",
+          "rival": "An early arithmetic miss can otherwise hide later interpretive understanding. The later part supplies any earlier quantity it needs."
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "prerequisite": "aea-observe.phrase",
+      "target": "aea-results.scores",
+      "reason": "A prompt maximum compares conditional phrase scores at different prefixes.",
+      "counterfactual": "Without a boundary score the learner cannot tell what each number in the max represents.",
+      "task": "aea-results.scores.mc-2",
+      "provenance": "author-hypothesis"
+    },
+    {
+      "prerequisite": "aea-results.scores",
+      "target": "aea-results.ranking",
+      "reason": "Figure 2 compares rankings induced by two different prompt scores at each budget.",
+      "counterfactual": "Without the aggregation rule the learner cannot identify which one-rollout score actually ranks the prompts.",
+      "task": "aea-mixed.rollout-ranking#3",
+      "provenance": "author-hypothesis"
+    },
+    {
+      "prerequisite": "aea-results.ranking",
+      "target": "aea-validity.transport",
+      "reason": "Transport compares fixed score rankings and operating thresholds on distinct populations.",
+      "counterfactual": "Without interpreting a ranking statistic the learner cannot explain why AUROC can survive while a frozen threshold fails.",
+      "task": "aea-validity.transport.direct-1",
+      "provenance": "author-hypothesis"
+    },
+    {
+      "prerequisite": "aea-results.pair-auc",
+      "target": "aea-results.ranking",
+      "reason": "The task interprets an AUROC claim as a comparison of positive and negative items.",
+      "counterfactual": "Without pairwise scoring, the learner can mistake ranking for threshold accuracy.",
+      "task": "aea-results.ranking.direct-1",
+      "provenance": "author-hypothesis"
+    },
+    {
+      "prerequisite": "aea-results.any-flag",
+      "target": "aea-results.variance",
+      "reason": "The second part interprets the frequency of ever-positive prompts after increasing their sample budget.",
+      "counterfactual": "Without the complement relationship, the learner cannot explain why the observed group changes even when per-draw propensity is stable.",
+      "task": "aea-mixed.repeated-sampling#2",
+      "provenance": "author-hypothesis"
+    }
+  ],
+  "semantic_links": [
+    {
+      "a": "aea-observe.signal",
+      "b": "aea-validity.faithfulness",
+      "type": "contrasts",
+      "reason": "Sampling can omit a phrase by chance, while faithfulness tests whether an omitted factor influenced a decision."
+    },
+    {
+      "a": "aea-results.variance",
+      "b": "aea-validity.causal",
+      "type": "contrasts",
+      "reason": "Grouping observed rollouts assesses association. Randomized interventions test effects on behavior."
+    },
+    {
+      "a": "aea-observe.readouts",
+      "b": "aea-results.targets",
+      "type": "explains",
+      "reason": "A phrase readout is tied to linguistic expression, so different phrase targets can behave differently."
+    },
+    {
+      "a": "aea-validity.confounds",
+      "b": "aea-validity.transport",
+      "type": "explains",
+      "reason": "A source cue can remain predictive in a random split and fail on a different evaluation source."
+    },
+    {
+      "a": "aea-validity.causal",
+      "b": "aea-validity.strategy",
+      "type": "evidence-for",
+      "reason": "A controlled behavior shift can support one link in a strategic account, while incentives and objective require separate evidence."
+    },
+    {
+      "a": "aea-results.scores",
+      "b": "aea-results.variance",
+      "type": "explains",
+      "reason": "The variance comparison summarizes a per-rollout peak and groups traces by individual or prompt-level verbalization."
+    }
+  ],
+  "revision": {
+    "status": "unpiloted",
+    "notes": "No learner pilot has been conducted.",
+    "record": "",
+    "triggers": [
+      "Revise if learners confuse probability of a phrase with probability of an internal belief.",
+      "Split or revise if performance on the two Figure 2 targets diverges.",
+      "Revise if controlled-study answers omit a rival prediction.",
+      "Check whether computing a score transfers to reading the corresponding result and whether early gate evidence predicts later success."
+    ]
+  }
+}
