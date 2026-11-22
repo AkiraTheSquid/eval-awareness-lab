@@ -1,1 +1,6 @@
 id,date,idea,prediction,probability,outcome,hit,notes
+P001,2026-11-22,X1 asking vs testing gap source (Qwen3-32B ref),"AUROC(asking)-AUROC(testing) gap already present at k=0",0.6,"k=0 +0.049 [-0.012,+0.107]; k=4 +0.093 [+0.028,+0.160]",0,"gap at k=0 is half the k=4 gap and within noise; it grows with sampled reasoning. Written by the Linux agent; I had seen the E0 k=0 rows before running the paired test"
+P002,2026-11-22,X2 argmax boundary position (Qwen3-32B ref),"eval prompts peak earlier in the reasoning than deploy",0.5,"eval 0.54 vs deploy 0.40 of reasoning; diff +0.148 [+0.004,+0.276]",0,"opposite direction, barely outside noise on 67 pairs"
+P003,2026-11-22,E1 monitor level on Qwen3-1.7B,"monitor AUROC at k=8 is below the 32B reference (0.650) and its 95% CI includes 0.5",0.5,,,
+P004,2026-11-22,E1 control vs primary on Qwen3-1.7B,"control phrase alone has AUROC >= primary at k=8 (as on 32B)",0.6,,,
+P005,2026-11-22,E1 verbalisation on Qwen3-1.7B,"fewer than 5% of rollouts match the keyword regex in either set",0.7,,,

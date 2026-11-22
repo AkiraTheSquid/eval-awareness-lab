@@ -1,0 +1,6 @@
+{
+ "within_prompt_var_of_rollout_max": 9.226695968248942,
+ "between_prompt_var_of_prompt_mean": 55.768272377661575,
+ "share_between": 0.858039842112955,
+ "note": "naive ICC-style share; R6 fits the proper mixed model"
+}
