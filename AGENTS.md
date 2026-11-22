@@ -29,7 +29,9 @@ Every experiment should help answer one of them, or test a theory the course tea
 3. `docs/02-experiments.md`: the experiment catalogue, in the order to run it.
 4. `docs/03-exercise-handoff.md`: what each finished experiment must hand over.
 5. `docs/04-collab-protocol.md`: how you and the Linux agent talk through this repo.
-6. `reference/`: a validated implementation (run on Qwen3-32B on a rented GPU) and its results.
+6. `docs/05-research-loop.md`: you are also expected to *find* good experiments: propose ideas, pilot
+   them cheaply, decide kill / pivot / scale from the results, and track how good your predictions are.
+7. `reference/`: a validated implementation (run on Qwen3-32B on a rented GPU) and its results.
 
 ## Hard rules
 

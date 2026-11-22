@@ -11,6 +11,7 @@ content). Neither can see the other's chat. Everything the other side needs must
 | `lab/`, `runs/`, `exercises/`, `STATUS.md` | Windows agent | reads; asks via issues |
 | `docs/`, `reference/`, `AGENTS.md`, `README.md` | Linux agent | reads; asks via issues |
 | `answers/` | Windows agent drafts, Linux agent edits after review | both |
+| `research/` (ideas, journal, predictions, taste) | Windows agent | Linux agent comments via issues |
 
 Push directly to `main` for files you own (`git pull --rebase` first, small commits, clear messages).
 To change something the other side owns, open an issue or a pull request and let them merge it.
