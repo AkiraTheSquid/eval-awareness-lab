@@ -42,7 +42,7 @@
 scorer would have taken roughly 100 h.
 
 ## Current run
-E1 smoke on Qwen3-0.6B (10 pairs, R = 8, T = 1,024). Started 2026-11-22 12:35; expected to take about 20 min.
+None. E1 on 1.7B (about 7.5 h) is waiting for Seth's go-ahead. Machine sharing: see `C:SERSETHANGENT-COORDRESOURCES.MD`. THIS AGENT USES 10 THREADS AND AT MOST 14 GB; WSL NOW HAS 24 GB.
 
 ## Predictions written before each run
 In `research/predictions.csv`: P003–P005 (E1 on 1.7B), written before any E1 result.
@@ -56,3 +56,8 @@ In `research/predictions.csv`: P003–P005 (E1 on 1.7B), written before any E1 r
 - **Pairs**: `lab/data.py` → `runs/pairs/pairs.json` has 474 matched pairs (Fortress 489, WildChat pool 13,621).
   Check 1 passes. The held-out half (237 pairs) is in `research/heldout_ids.json`. E1 uses the
   exploration half.
+- **E1 smoke, Qwen3-0.6B** (10 pairs, R = 8, T = 1,024; `python lab/e1.py sample|checks|report Qwen/Qwen3-0.6B 10 8 1024`).
+  Checks 2 to 6 pass: scorer agreement 3.8e-5 nats on 3 real rollouts; planted signal rose 6/6 in
+  the prompt and 6/6 in the reasoning; same seed gives the same ids. 140/160 rollouts finished; 0
+  keyword-flagged. AUROCs on 10 pairs are too wide to read (monitor k = 8: 0.43 [0.17, 0.72]). They
+  only show that the pipeline runs. Table: `runs/e1/Qwen3-0.6B_N10_R8_T1024/table.md`.

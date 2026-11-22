@@ -25,7 +25,8 @@ import analysis as A
 import data as D
 import monitor as M
 
-t.set_num_threads(12)
+# share of the PC agreed in /mnt/c/Users/ethan/agent-coord/RESOURCES.md
+t.set_num_threads(int(os.environ.get("LAB_THREADS", 10)))
 PHRASES = [M.PRIMARY, M.CONTROL]
 KEYS = dict(zip(PHRASES, ("testing", "asking")))
 
