@@ -1,6 +1,6 @@
 # 06 · Spec: research taste, pass 1
 
-Status: signed off 2026-11-22 (all four decisions as recommended). Part A built; part B in progress.
+Status: signed off 2026-11-22 (all four decisions as recommended). Part A built (E1 prediction request: issue #28). Part B built, compiled and Jev-passed in Delta Drills; deploy pending.
 
 ## Goal
 
