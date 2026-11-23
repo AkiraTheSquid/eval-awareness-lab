@@ -12,6 +12,7 @@ content). Neither can see the other's chat. Everything the other side needs must
 | `docs/`, `reference/`, `AGENTS.md`, `README.md` | Linux agent | reads; asks via issues |
 | `answers/` | Windows agent drafts, Linux agent edits after review | both |
 | `research/` (ideas, journal, predictions, taste) | Windows agent | Linux agent comments via issues |
+| `research/seth-predictions.csv`, `research/calibration.py` | Seth (either agent records his rows; `question`, `prediction`, `probability` and `drop_if` are frozen once pushed, and only `outcome`, `hit`, `brier`, `late` and `notes` are filled in after the result) | both |
 
 Push directly to `main` for files you own (`git pull --rebase` first, small commits, clear messages).
 To change something the other side owns, open an issue or a pull request and let them merge it.

@@ -21,6 +21,23 @@ Split time roughly 70% on the catalogue and 30% on exploration, and say in `STAT
 
 ## 2. The loop
 
+0. **Seth predicts first (added 2026-11-22, `docs/06`).** The loop exists to train *Seth's* research
+   taste, not only yours. Before any pilot or confirmation run that bears on Q1–Q3, open an issue
+   labelled `needs-seth` and `predict`, titled `Predict: <id> <one line>`, holding:
+   - the exact quantity to be measured (e.g. "AUROC of max primary − max control at k = 8, exploration
+     half, 100 pairs") and what counts as a hit;
+   - what is already known that bears on it (earlier results with intervals), so he predicts from the
+     same evidence you have;
+   - **not** your own prediction. Write yours in `research/predictions.csv` as usual, but leave it
+     out of the issue.
+   Seth answers in the issue or in chat: a prediction, a probability, and what result would make him
+   drop the idea. Whoever receives it (either agent) adds the row to `research/seth-predictions.csv`
+   and pushes it **before the run starts**; the commit time is the proof it came first. Then run.
+   When the result is in, fill `outcome` and `hit` in both CSVs (and `brier` in Seth's; the agents'
+   CSV has no such column, `calibration.py` prints it per row) and comment the result on
+   the issue. A run that needs Seth's go-ahead anyway (over 30 minutes) asks for the prediction in
+   the same message. Pilots on cached data under 5 minutes may run without waiting; still post the
+   request, and record Seth's row as `late` if it arrives after the result exists.
 1. **Idea.** Add it to `research/ideas.md` (format below). Good sources of ideas, in order:
    a result that surprised you; a check that failed or came out odd; a confound nobody has ruled out;
    a limitation the paper's authors state; a disagreement between two monitors or two models; anything
@@ -62,6 +79,11 @@ Every prediction goes into `research/predictions.csv`:
 id,date,idea,prediction,probability,outcome,hit,notes
 P007,2026-11-30,E5 asking vs testing on 1.7B,"asking AUROC >= testing AUROC",0.6,"0.71 vs 0.62",1,
 ```
+
+Seth's predictions go into `research/seth-predictions.csv` (same columns plus `drop_if`, `brier`,
+`late`; the `ref` column names the matching `predictions.csv` row). `python research/calibration.py`
+prints hit rate, Brier score and a reliability table for each predictor, plus a head-to-head on the
+questions both of you predicted. Late rows are left out of Seth's score.
 
 After every 10 resolved predictions, add a short section to `research/taste.md`:
 
